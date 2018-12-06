@@ -63,10 +63,6 @@ public class Main extends Application {
                         foodData = new FoodData();
                         foodData.loadFoodItems(file.getAbsolutePath());
                         String[] names = new String[foodData.getAllFoodItems().size()];
-//                      int index = 0;
-//                      for(FoodItem f: foodData.getAllFoodItems()) {
-//                          names[index++] = f.getName();
-//                      }
                         ObservableList<FoodItem> items = FXCollections.observableArrayList(foodData.getAllFoodItems());
                         listOfFoods.setItems(items);
                         numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
