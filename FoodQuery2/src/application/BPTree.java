@@ -207,7 +207,9 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		 * @see BPTree.Node#insert(java.lang.Comparable, java.lang.Object)
 		 */
 		void insert(K key, V value) {
-			int Loc = Collections.binarySearch(keys, key);
+			int index = Collections.binarySearch(keys, key);
+			int childIndex = index >= 0 ? index + 1: -index -1;
+			Node child = children.get(childIndex);
 		}
 
 		/**
