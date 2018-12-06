@@ -11,6 +11,10 @@ import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -35,6 +39,7 @@ public class Main extends Application {
     public ListView<FoodItem> listOfFoods;
     public Label numberLabel;
     public ListView<FoodItem> mealViewer;
+    public BarChart nutriAnalysis;
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -63,10 +68,6 @@ public class Main extends Application {
                         foodData = new FoodData();
                         foodData.loadFoodItems(file.getAbsolutePath());
                         String[] names = new String[foodData.getAllFoodItems().size()];
-//                      int index = 0;
-//                      for(FoodItem f: foodData.getAllFoodItems()) {
-//                          names[index++] = f.getName();
-//                      }
                         ObservableList<FoodItem> items = FXCollections.observableArrayList(foodData.getAllFoodItems());
                         listOfFoods.setItems(items);
                         numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
@@ -189,11 +190,13 @@ public class Main extends Application {
                     mealViewer.setPrefWidth(400);
                     mealViewer.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
                     this.getChildren().add(mealViewer);
+                    
                     this.getChildren().add(new HBox(10) {
                         {
                             this.getChildren().add(new Button("Remove From Meal") {
                                 {
                                     this.setOnAction(e -> {
+                                       
                                         for(FoodItem f :mealViewer.getSelectionModel().getSelectedItems()){
                                             mealList.removeFromMeal(f);
                                         }
@@ -201,16 +204,43 @@ public class Main extends Application {
                                     });
                                 }
                             });
-                            this.getChildren().add(new Button("Analyze Nutritional Analysis"));
+                            this.getChildren().add(new Button("Analyze Nutritional Analysis") {
+                                {
+                                    this.setOnAction(e -> { 
+                                        Stage popupStage = new Stage();
+                                        AnchorPane popupPane = new AnchorPane();
+                                        popupPane.setMaxHeight(400);
+                                        popupPane.setMaxWidth(900);
+                                        CategoryAxis xAxis    = new CategoryAxis();
+                                        xAxis.setLabel("Nutrient");
+                                        NumberAxis yAxis = new NumberAxis();
+                                        yAxis.setLabel("Total");
+                                        BarChart nutriAnalysis = new BarChart(xAxis, yAxis);
+                                        nutriAnalysis.setPrefHeight(400);
+                                        nutriAnalysis.setPrefWidth(500);
+                                        XYChart.Series dataSeries1 = new XYChart.Series();
+                                        dataSeries1.setName("Nutrients within Selected Meal List");
+                                        mealList.nutriAnalysis();
+                                        dataSeries1.getData().add(new XYChart.Data("Calories", mealList.getTotalCals()));
+                                        dataSeries1.getData().add(new XYChart.Data("Fat (grams)", mealList.getTotalFat()));
+                                        dataSeries1.getData().add(new XYChart.Data("Carbs (grams)"  , mealList.getTotalCarbs()));
+                                        dataSeries1.getData().add(new XYChart.Data("Fiber (grams)", mealList.getTotalFiber()));
+                                        dataSeries1.getData().add(new XYChart.Data("Protein (grams)", mealList.getTotalProtein()));
+                                        nutriAnalysis.getData().add(dataSeries1);
+                                        popupPane.getChildren().add(nutriAnalysis);
+                                        Scene scene = new Scene(popupPane, 900, 400);
+                                        popupStage.setScene(scene);
+                                        popupStage.show();
+                                    });
+                                    
+                                }
+                            });
                         }
                     });
-                    Label analysis = new Label("Nutritional Analysis");
-                    analysis.setFont(new Font("Arial", 30));
-                    this.getChildren().add(analysis);
-                    ListView<String> nutriAnalysis = new ListView<String>();
-                    nutriAnalysis.setPrefHeight(900);
-                    nutriAnalysis.setPrefWidth(400);
-                    this.getChildren().add(nutriAnalysis);
+//                    Label analysis = new Label("Nutritional Analysis");
+//                    analysis.setFont(new Font("Arial", 30));
+//                    this.getChildren().add(analysis);
+                    
                 }
             });
             root.setRight(meal);
