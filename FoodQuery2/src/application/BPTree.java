@@ -210,6 +210,19 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 			int index = Collections.binarySearch(keys, key);
 			int childIndex = index >= 0 ? index + 1: -index -1;
 			Node child = children.get(childIndex);
+			child.insert(key, value);
+			
+			if(child.isOverflow()) {
+				Node sibling = child.split();
+				int index2 = Collections.binarySearch(keys, key);
+				int childIndex2 = index2 >= 0 ? index2 + 1: -index2 -1;
+				if(index2 >= 0) {
+					children.set(childIndex2, child);
+				}else {
+					keys.add(e)
+				}
+				Node child = children.get(childIndex);
+			}
 		}
 
 		/**
