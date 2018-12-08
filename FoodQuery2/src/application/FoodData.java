@@ -111,8 +111,14 @@ public class FoodData implements FoodDataADT<FoodItem> {
     	for (int i = 0; i < rules.size(); ++i) {
     		if (!(rules.get(i).equals(""))) {
     			String[] tokens = rules.get(i).split(" ");
+    			String comparator = tokens[0];
     			double key = Double.parseDouble(tokens[1]);
-    			nutrientFilters.addAll(indexes.get((indexes.keySet().toArray())[i]).rangeSearch(key,tokens[0]));
+    			List<FoodItem> nutrientRangeList = (indexes.get((indexes.keySet().toArray())[i]).rangeSearch(key, comparator));
+    			for (int j = 0; i < nutrientRangeList.size(); j++) {
+    				if (!nutrientFilters.contains(nutrientRangeList.get(j))) {
+    					nutrientFilters.add(nutrientRangeList.get(j));
+    				}
+    			}
     		}
     	}
         return nutrientFilters;
