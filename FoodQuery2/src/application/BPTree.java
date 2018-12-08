@@ -244,7 +244,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 			int indexStart = (keys.size() + 1) / 2;
 			int indexEnd = keys.size();
 			sibling.keys.addAll(keys.subList(indexStart, indexEnd));
-			sibling.children.addAll(children.subList(indexStart, indexEnd + 1)));
+			sibling.children.addAll(children.subList(indexStart, indexEnd + 1));
 
 			keys.subList(indexStart -1 , indexEnd).clear();
 			children.subList(indexStart, indexEnd + 1);
