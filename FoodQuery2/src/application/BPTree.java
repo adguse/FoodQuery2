@@ -208,18 +208,20 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		 */
 		void insert(K key, V value) {
 			int index = Collections.binarySearch(keys, key);
-			int childIndex = index >= 0 ? index + 1: -index -1;
-			Node child = children.get(childIndex);
+			int childrenIndex = index >= 0 ? index + 1 : -index - 1;
+			Node child = children.get(childrenIndex);
 			child.insert(key, value);
-			
-			if(child.isOverflow()) {
+
+			if (child.isOverflow()) {
 				Node sibling = child.split();
 				int index2 = Collections.binarySearch(keys, key);
-				int childIndex2 = index2 >= 0 ? index2 + 1: -index2 -1;
-				if(index2 >= 0) {
-					children.set(childIndex2, child);
-				}else {
-					keys.add(e)
+				int childIndex2 = index2 >= 0 ? index2 + 1 : -index2 - 1;
+				if (index2 >= 0) {
+					children.set(childIndex2, sibling);
+				} else {
+					keys.add(childIndex2, sibling.getFirstLeafKey());
+					children.add(childIndex2 + 1, sibling);
+
 				}
 				Node child = children.get(childIndex);
 			}
@@ -308,12 +310,12 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 				keys.add(valueIndex, key);
 				values.add(valueIndex, value);
 			}
-			if (isOverflow()) {
+			if (root.isOverflow()) {
 				Node sibling = split();
 				InternalNode parent = new InternalNode();
-				parent.keys.add(this.getFirstLeafKey());
-				parent.children.add(sibling);
+				parent.keys.add(sibling.getFirstLeafKey());
 				parent.children.add(this);
+				parent.children.add(sibling);
 				root = parent;
 			}
 
@@ -325,6 +327,19 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		 * @see BPTree.Node#split()
 		 */
 		Node split() {
+			LeafNode sibling = new LeafNode();
+			int indexStart = (keys.size() + 1) / 2;
+			int indexEnd = keys.size();
+			sibling.keys.addAll(keys.subList(indexStart, indexEnd));
+			sibling.values.addAll(values.subList(indexStart, indexEnd));
+
+			keys.subList(indexStart, indexEnd).clear();
+			values.subList(indexStart, indexEnd);
+
+			this.next = sibling;
+			sibling.previous = this;
+			return sibling;
+
 			int index = keys.size() / 2;
 			ArrayList<K> leftNodeKeys = (ArrayList<K>) keys.subList(0, index);
 			ArrayList<V> leftNodeValues = (ArrayList<V>) values.subList(0, index);
