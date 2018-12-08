@@ -223,7 +223,14 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 					children.add(childIndex2 + 1, sibling);
 
 				}
-				Node child = children.get(childIndex);
+			}
+			if (root.isOverflow()) {
+				Node sibling = split();
+				InternalNode parent = new InternalNode();
+				parent.keys.add(sibling.getFirstLeafKey());
+				parent.children.add(this);
+				parent.children.add(sibling);
+				root = parent;
 			}
 		}
 
@@ -233,8 +240,16 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		 * @see BPTree.Node#split()
 		 */
 		Node split() {
-			// TODO : Complete
-			return null;
+			InternalNode sibling = new InternalNode();
+			int indexStart = (keys.size() + 1) / 2;
+			int indexEnd = keys.size();
+			sibling.keys.addAll(keys.subList(indexStart, indexEnd));
+			sibling.children.addAll(children.subList(indexStart, indexEnd + 1)));
+
+			keys.subList(indexStart -1 , indexEnd).clear();
+			children.subList(indexStart, indexEnd + 1);
+
+			return sibling;
 		}
 
 		/**
@@ -339,20 +354,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 			this.next = sibling;
 			sibling.previous = this;
 			return sibling;
-
-			int index = keys.size() / 2;
-			ArrayList<K> leftNodeKeys = (ArrayList<K>) keys.subList(0, index);
-			ArrayList<V> leftNodeValues = (ArrayList<V>) values.subList(0, index);
-			keys.subList(0, index).clear();
-			values.subList(0, index).clear();
-
-			LeafNode otherLeaf = new LeafNode();
-			otherLeaf.keys = leftNodeKeys;
-			otherLeaf.values = leftNodeValues;
-			otherLeaf.next = this;
-			this.previous = otherLeaf;
-
-			return otherLeaf;
 		}
 
 		/**
