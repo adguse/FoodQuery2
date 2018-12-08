@@ -21,21 +21,25 @@ public class FormType extends VBox {
 		checkbox.setOnAction(e -> {
 			textField.setDisable(!textField.isDisabled());
 		});
-		textField.setOnAction(e -> {
-			if (Main.listOfFoods.getItems().isEmpty())
-				return;
-			List<FoodItem> filtered = Main.foodData.filterByName(textField.getText());
-			for (FoodItem item : filtered) {
-				if (!Main.listOfFoods.getItems().contains(item)) {
-					filtered.remove(item);
+	}
+
+	public void filter(boolean name) {
+		if (checkbox.isSelected()) {
+			if (name) {
+				List<FoodItem> filtered = Main.foodData.filterByName(textField.getText());
+				for (int i = 0; i < filtered.size(); i++) {
+					if (!Main.listOfFoods.getItems().contains(filtered.get(i))) {
+						filtered.remove(i);
+						i--;
+					}
 				}
+				ObservableList<FoodItem> items = FXCollections.observableArrayList(filtered);
+				Main.listOfFoods.setItems(items);
+				Main.numberLabel.setText("# of items in Food List: " + Main.listOfFoods.getItems().size());
+			} else {
+
 			}
-			
-			ObservableList<FoodItem> items = FXCollections
-					.observableArrayList(Main.foodData.filterByName(textField.getText()));
-			Main.listOfFoods.setItems(items);
-			Main.numberLabel.setText("# of items in Food List: " + Main.listOfFoods.getItems().size());
-		});
+		}
 	}
 
 	public String getText() {

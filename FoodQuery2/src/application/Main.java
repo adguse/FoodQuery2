@@ -49,8 +49,7 @@ public class Main extends Application {
 	public static Label numberLabel;
 	public ListView<FoodItem> mealViewer;
 	public BarChart nutriAnalysis;
-	public TextField[] fields;
-	public CheckBox[] checkboxes;
+	public FormType[] forms = new FormType[6];
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -296,9 +295,9 @@ public class Main extends Application {
 //			});
 			middleLeft.getChildren().add(new VBox(10) {
 				{
-					this.getChildren().add(new FormType("Name Filter"));
-					this.getChildren().add(new FormType("Calorie Filter"));
-					this.getChildren().add(new FormType("Carb Filter"));
+					this.getChildren().add(forms[0] = new FormType("Name Filter"));
+					this.getChildren().add(forms[1] = new FormType("Calorie Filter"));
+					this.getChildren().add(forms[2] = new FormType("Carb Filter"));
 				}
 			});
 			middleRight.setPadding(new Insets(10, 50, 0, 0));
@@ -312,9 +311,9 @@ public class Main extends Application {
 //					this.getChildren().add(new TextField());
 //					this.getChildren().add(new CheckBox("Fat Filter"));
 //					this.getChildren().add(new TextField());
-					this.getChildren().add(new FormType("Protein Filter"));
-					this.getChildren().add(new FormType("Fiber Filter"));
-					this.getChildren().add(new FormType("Fat Filter"));
+					this.getChildren().add(forms[3] = new FormType("Protein Filter"));
+					this.getChildren().add(forms[4] = new FormType("Fiber Filter"));
+					this.getChildren().add(forms[5] = new FormType("Fat Filter"));
 				}
 			});
 
@@ -324,13 +323,11 @@ public class Main extends Application {
 			all.getChildren().add(middle);
 			HBox button = new HBox(10);
 			Button na = new Button("Apply");
-//			na.setOnAction(e -> {
-//				ObservableList<FoodItem> items = FXCollections
-//						.observableArrayList(foodData.filterByName(nameField.getText()));
-//				listOfFoods.setItems(items);
-//				numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
-//
-//			});
+			na.setOnAction(e -> {
+				for(FormType f : forms) {
+					f.filter(true);
+				}
+			});
 			button.getChildren().addAll(na);
 			Button help = new Button("Help");
 			help.setTooltip(new Tooltip(
