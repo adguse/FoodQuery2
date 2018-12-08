@@ -1,6 +1,14 @@
 package application;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.sun.javafx.geom.BaseBounds;
+import com.sun.javafx.geom.transform.BaseTransform;
+import com.sun.javafx.jmx.MXNodeAlgorithm;
+import com.sun.javafx.jmx.MXNodeAlgorithmContext;
+import com.sun.javafx.sg.prism.NGNode;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -10,6 +18,7 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -34,13 +43,14 @@ import javafx.scene.text.Font;
 
 public class Main extends Application {
 	public File file = null;
-	public FoodData foodData = null;
+	public static FoodData foodData = null;
 	public MealBuilder mealList = new MealBuilder();
-	public ListView<FoodItem> listOfFoods;
-	public Label numberLabel;
+	public static ListView<FoodItem> listOfFoods;
+	public static Label numberLabel;
 	public ListView<FoodItem> mealViewer;
 	public BarChart nutriAnalysis;
-	public TextField nameField = null;
+	public TextField[] fields;
+	public CheckBox[] checkboxes;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -265,23 +275,30 @@ public class Main extends Application {
 			middleLeft.setPadding(new Insets(10, 50, 0, 0));
 			middleLeft.setMaxHeight(400);
 			middleLeft.setMaxWidth(200);
+//			middleLeft.getChildren().add(new VBox(10) {
+//				{
+//					this.getChildren().add(checkboxes[0] = new CheckBox("Name Filter"));
+//					this.getChildren().add(fields[0] = new TextField() {
+//						{
+//							this.setOnAction(e -> {
+//								ObservableList<FoodItem> items = FXCollections
+//										.observableArrayList(foodData.filterByName(this.getText()));
+//								listOfFoods.setItems(items);
+//								numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
+//							});
+//						}
+//					});
+//					this.getChildren().add(checkboxes[1] = new CheckBox("Calorie Filter"));
+//					this.getChildren().add(fields[1] = new TextField());
+//					this.getChildren().add(checkboxes[2] = new CheckBox("Carb Filter"));
+//					this.getChildren().add(fields[2] = new TextField());
+//				}
+//			});
 			middleLeft.getChildren().add(new VBox(10) {
 				{
-					this.getChildren().add(new CheckBox("Name Filter"));
-					this.getChildren().add(nameField = new TextField() {
-						{
-							this.setOnAction(e -> {
-								ObservableList<FoodItem> items = FXCollections
-										.observableArrayList(foodData.filterByName(this.getText()));
-								listOfFoods.setItems(items);
-								numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
-							});
-						}
-					});
-					this.getChildren().add(new CheckBox("Calorie Filter"));
-					this.getChildren().add(new TextField());
-					this.getChildren().add(new CheckBox("Carb Filter"));
-					this.getChildren().add(new TextField());
+					this.getChildren().add(new FormType("Name Filter"));
+					this.getChildren().add(new FormType("Calorie Filter"));
+					this.getChildren().add(new FormType("Carb Filter"));
 				}
 			});
 			middleRight.setPadding(new Insets(10, 50, 0, 0));
@@ -289,12 +306,15 @@ public class Main extends Application {
 			middleRight.setMaxWidth(200);
 			middleRight.getChildren().add(new VBox(10) {
 				{
-					this.getChildren().add(new CheckBox("Protein Filter"));
-					this.getChildren().add(new TextField());
-					this.getChildren().add(new CheckBox("Fiber Filter"));
-					this.getChildren().add(new TextField());
-					this.getChildren().add(new CheckBox("Fat Filter"));
-					this.getChildren().add(new TextField());
+//					this.getChildren().add(new CheckBox("Protein Filter"));
+//					this.getChildren().add(new TextField());
+//					this.getChildren().add(new CheckBox("Fiber Filter"));
+//					this.getChildren().add(new TextField());
+//					this.getChildren().add(new CheckBox("Fat Filter"));
+//					this.getChildren().add(new TextField());
+					this.getChildren().add(new FormType("Protein Filter"));
+					this.getChildren().add(new FormType("Fiber Filter"));
+					this.getChildren().add(new FormType("Fat Filter"));
 				}
 			});
 
@@ -304,13 +324,13 @@ public class Main extends Application {
 			all.getChildren().add(middle);
 			HBox button = new HBox(10);
 			Button na = new Button("Apply");
-			na.setOnAction(e -> {
-				ObservableList<FoodItem> items = FXCollections
-						.observableArrayList(foodData.filterByName(nameField.getText()));
-				listOfFoods.setItems(items);
-				numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
-
-			});
+//			na.setOnAction(e -> {
+//				ObservableList<FoodItem> items = FXCollections
+//						.observableArrayList(foodData.filterByName(nameField.getText()));
+//				listOfFoods.setItems(items);
+//				numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
+//
+//			});
 			button.getChildren().addAll(na);
 			Button help = new Button("Help");
 			help.setTooltip(new Tooltip(
