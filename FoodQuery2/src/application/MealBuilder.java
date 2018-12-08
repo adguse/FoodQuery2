@@ -80,7 +80,16 @@ public class MealBuilder {
         this.mealList.remove(foodStuff);
     }
     
+    public void clearNutri() {
+        this.totalCals = 0;
+        this.totalFat = 0;
+        this.totalCarbs = 0;
+        this.totalFiber = 0;
+        this.totalProtein = 0;
+    }
+    
     public void nutriAnalysis() {
+        clearNutri();
         for(FoodItem f: this.mealList) {
             this.totalCals += f.getNutrientValue("calories");
             this.totalFat += f.getNutrientValue("fat");
