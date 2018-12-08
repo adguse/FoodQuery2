@@ -294,7 +294,7 @@ public class Main extends Application {
 												.add(new XYChart.Data("Protein (grams)", mealList.getTotalProtein()));
 										nutriAnalysis.getData().add(dataSeries1);
 										popupPane.getChildren().add(nutriAnalysis);
-										Scene scene = new Scene(popupPane, 900, 400);
+										Scene scene = new Scene(popupPane, 600, 400);
 										popupStage.setScene(scene);
 										popupStage.show();
 									});
