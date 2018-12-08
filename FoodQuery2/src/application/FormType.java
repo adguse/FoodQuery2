@@ -25,6 +25,11 @@ public class FormType extends VBox {
 			if (Main.listOfFoods.getItems().isEmpty())
 				return;
 			List<FoodItem> filtered = Main.foodData.filterByName(textField.getText());
+			for (FoodItem item : filtered) {
+				if (!Main.listOfFoods.getItems().contains(item)) {
+					filtered.remove(item);
+				}
+			}
 			
 			ObservableList<FoodItem> items = FXCollections
 					.observableArrayList(Main.foodData.filterByName(textField.getText()));
