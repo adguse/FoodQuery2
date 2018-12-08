@@ -13,6 +13,7 @@ import com.sun.javafx.jmx.MXNodeAlgorithmContext;
 import com.sun.javafx.sg.prism.NGNode;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -62,6 +63,7 @@ public class Main extends Application {
 		}
     	
     };
+    public Stage popupStage = new Stage();
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -69,7 +71,13 @@ public class Main extends Application {
 			BorderPane root = new BorderPane();
 			MenuBar bar = new MenuBar();
 			Menu fileMenu = new Menu("File");
-			fileMenu.getItems().add(new MenuItem("Close"));
+			fileMenu.getItems().add(new MenuItem("Close") {
+				{
+					this.setOnAction(e -> {
+						Platform.exit();
+					});
+				}
+			});
 			Menu helpMenu = new Menu("Help");
 			helpMenu.getItems().add(new MenuItem("About"));
 			bar.getMenus().add(fileMenu);
@@ -136,9 +144,10 @@ public class Main extends Application {
 					});
 					this.getChildren().add(new Button("Add To Food List") {
 						{
+							popupStage = new Stage();
 							this.setOnAction(e -> {
 								apply.setOnAction(ee -> {
-									FoodItem f = new FoodItem(fields[1].getText(), fields[0].getText());
+									FoodItem f = new FoodItem(fields[1].getText(), fields[0].getText().toLowerCase());
 									f.addNutrient("calories", Double.parseDouble(fields[2].getText()));
 									f.addNutrient("carbohydrate", Double.parseDouble(fields[3].getText()));
 									f.addNutrient("protein", Double.parseDouble(fields[4].getText()));
@@ -148,7 +157,6 @@ public class Main extends Application {
 									listOfFoods.getItems().sort(lexicographicOrder);
 									foodData.addFoodItem(f);
 								});
-								Stage popupStage = new Stage();
 								AnchorPane popupPane = new AnchorPane();
 								popupPane.setMaxHeight(400);
 								popupPane.setMaxWidth(400);
@@ -207,7 +215,13 @@ public class Main extends Application {
 											{
 												this.setPadding(new Insets(0, 25, 0, 25));
 												this.getChildren().add(apply);
-												this.getChildren().add(new Button("Close"));
+												this.getChildren().add(new Button("Close") {
+													{
+														this.setOnAction(e -> {
+															popupStage.close();
+														});
+													}
+												});
 											}
 										});
 									}
