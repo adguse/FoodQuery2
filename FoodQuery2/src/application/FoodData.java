@@ -31,7 +31,11 @@ public class FoodData implements FoodDataADT<FoodItem> {
     public FoodData() {
         this.foodItemList = new ArrayList<FoodItem>();
         this.indexes = new HashMap<String, BPTree<Double, FoodItem>>();
-        
+        indexes.put("Calories", new BPTree<Double, FoodItem>(3));
+        indexes.put("Carb", new BPTree<Double, FoodItem>(3));
+        indexes.put("Protein", new BPTree<Double, FoodItem>(3));
+        indexes.put("Fiber", new BPTree<Double, FoodItem>(3));
+        indexes.put("Fat", new BPTree<Double, FoodItem>(3));
     }
     
     
@@ -103,8 +107,15 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> filterByNutrients(List<String> rules) {
-        // TODO : Complete
-        return null;
+    	List<FoodItem> nutrientFilters = new ArrayList<FoodItem>();
+    	for (int i = 0; i < rules.size(); ++i) {
+    		if (!(rules.get(i).equals(""))) {
+    			String[] tokens = rules.get(i).split(" ");
+    			double key = Double.parseDouble(tokens[1]);
+    			nutrientFilters.addAll(indexes.get((indexes.keySet().toArray())[i]).rangeSearch(key,tokens[0]));
+    		}
+    	}
+        return nutrientFilters;
     }
 
     /*
