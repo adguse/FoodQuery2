@@ -208,26 +208,28 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		 */
 		void insert(K key, V value) {
 			int index = Collections.binarySearch(keys, key);
-			int childrenIndex = index >= 0 ? index + 1 : -index - 1;
+			int childrenIndex = index >= 0 ? index : -index - 1;
 			Node child = children.get(childrenIndex);
 			child.insert(key, value);
 
 			if (child.isOverflow()) {
 				Node sibling = child.split();
 				int index2 = Collections.binarySearch(keys, key);
-				int childIndex2 = index2 >= 0 ? index2 + 1 : -index2 - 1;
-				if (index2 >= 0) {
-					children.set(childIndex2, sibling);
-				} else {
-					keys.add(childIndex2, child.getFirstLeafKey());
-					children.add(childIndex2, sibling);
-
+				int childIndex2 = index2 >= 0 ? index2 : -index2 - 1;
+				
+				keys.add(childIndex2, child.getFirstLeafKey());
+				if(child instanceof BPTree.InternalNode) {
+					child.keys.remove(0);
 				}
+				
+				children.add(childIndex2, sibling);
+
 			}
 			if (root.isOverflow()) {
 				Node sibling = split();
 				InternalNode parent = new InternalNode();
 				parent.keys.add(this.getFirstLeafKey());
+				
 				this.keys.subList(0, 1).clear();
 				parent.children.add(sibling);
 				parent.children.add(this);
@@ -320,12 +322,9 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		void insert(K key, V value) {
 			int index = Collections.binarySearch(keys, key);
 			int valueIndex = index >= 0 ? index : -index - 1;
-			if (index >= 0) {
-				values.set(valueIndex, value);
-			} else {
-				keys.add(valueIndex, key);
-				values.add(valueIndex, value);
-			}
+			keys.add(valueIndex, key);
+			values.add(valueIndex, value);
+
 			if (root.isOverflow()) {
 				Node sibling = split();
 				InternalNode parent = new InternalNode();
@@ -383,7 +382,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		Random rnd1 = new Random();
 
 		// some value to add to the BPTree
-		Double[] dd = { 14d, 67d, 44d, 12d, 55d, 80d, 101d, 34d, 78d };
+		Double[] dd = { 14d, 34d, 55d, 101d, 14d, 65d, 33d, 101d, 78d, 89d, 1d, 24d, 35d, 55d, 74d, 101d, 22d };
 
 		// build an ArrayList of those value and add to BPTree also
 		// allows for comparing the contents of the ArrayList
