@@ -23,23 +23,25 @@ public class FormType extends VBox {
 		});
 	}
 
-	public void filter(boolean name) {
+	public void filter(boolean type, List<FoodItem> list) {
 		if (checkbox.isSelected()) {
-			if (name) {
+			if (type) {
 				List<FoodItem> filtered = Main.foodData.filterByName(textField.getText());
-				for (int i = 0; i < filtered.size(); i++) {
-					if (!Main.listOfFoods.getItems().contains(filtered.get(i))) {
-						filtered.remove(i);
+				
+				for (int i = 0; i < list.size(); i++) {
+					if (!filtered.contains(list.get(i))) {
+						list.remove(i);
 						i--;
 					}
 				}
-				ObservableList<FoodItem> items = FXCollections.observableArrayList(filtered);
-				Main.listOfFoods.setItems(items);
-				Main.numberLabel.setText("# of items in Food List: " + Main.listOfFoods.getItems().size());
 			} else {
 
 			}
 		}
+	}
+	
+	public boolean isSelected() {
+		return checkbox.isSelected();
 	}
 
 	public String getText() {

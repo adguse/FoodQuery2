@@ -2,6 +2,8 @@ package application;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import com.sun.javafx.geom.BaseBounds;
@@ -45,12 +47,21 @@ public class Main extends Application {
 	public File file = null;
 	public static FoodData foodData = null;
 	public MealBuilder mealList = new MealBuilder();
-	public static ListView<FoodItem> listOfFoods;
-	public static Label numberLabel;
+	public ListView<FoodItem> listOfFoods;
+	public Label numberLabel;
 	public ListView<FoodItem> mealViewer;
 	public BarChart nutriAnalysis;
 	public FormType[] forms = new FormType[6];
+	public TextField[] fields = new TextField[7];
+	public Button apply = new Button("Apply");
+	public static Comparator<FoodItem> lexicographicOrder = new Comparator<FoodItem>() {
 
+		@Override
+		public int compare(FoodItem arg0, FoodItem arg1) {
+			return arg0.getName().compareTo(arg1.getName());
+		}
+    	
+    };
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -126,6 +137,17 @@ public class Main extends Application {
 					this.getChildren().add(new Button("Add To Food List") {
 						{
 							this.setOnAction(e -> {
+								apply.setOnAction(ee -> {
+									FoodItem f = new FoodItem(fields[1].getText(), fields[0].getText());
+									f.addNutrient("calories", Double.parseDouble(fields[2].getText()));
+									f.addNutrient("carbohydrate", Double.parseDouble(fields[3].getText()));
+									f.addNutrient("protein", Double.parseDouble(fields[4].getText()));
+									f.addNutrient("fiber", Double.parseDouble(fields[5].getText()));
+									f.addNutrient("fat", Double.parseDouble(fields[6].getText()));
+									listOfFoods.getItems().add(f);
+									listOfFoods.getItems().sort(lexicographicOrder);
+									foodData.addFoodItem(f);
+								});
 								Stage popupStage = new Stage();
 								AnchorPane popupPane = new AnchorPane();
 								popupPane.setMaxHeight(400);
@@ -136,48 +158,55 @@ public class Main extends Application {
 											{
 												this.setPadding(new Insets(25, 25, 25, 25));
 												this.getChildren().add(new Label("Name:"));
-												this.getChildren().add(new TextField());
+												this.getChildren().add(fields[0] = new TextField());
+											}
+										});
+										this.getChildren().add(new HBox(10) {
+											{
+												this.setPadding(new Insets(0, 25, 0, 25));
+												this.getChildren().add(new Label("ID:"));
+												this.getChildren().add(fields[1] = new TextField());
 											}
 										});
 										this.getChildren().add(new HBox(10) {
 											{
 												this.setPadding(new Insets(0, 25, 0, 25));
 												this.getChildren().add(new Label("Calories:"));
-												this.getChildren().add(new TextField());
+												this.getChildren().add(fields[2] = new TextField());
 											}
 										});
 										this.getChildren().add(new HBox(10) {
 											{
 												this.setPadding(new Insets(0, 25, 0, 25));
 												this.getChildren().add(new Label("Carbs:"));
-												this.getChildren().add(new TextField());
+												this.getChildren().add(fields[3] = new TextField());
 											}
 										});
 										this.getChildren().add(new HBox(10) {
 											{
 												this.setPadding(new Insets(0, 25, 0, 25));
 												this.getChildren().add(new Label("Protein:"));
-												this.getChildren().add(new TextField());
+												this.getChildren().add(fields[4] = new TextField());
 											}
 										});
 										this.getChildren().add(new HBox(10) {
 											{
 												this.setPadding(new Insets(0, 25, 0, 25));
 												this.getChildren().add(new Label("Fiber:"));
-												this.getChildren().add(new TextField());
+												this.getChildren().add(fields[5] = new TextField());
 											}
 										});
 										this.getChildren().add(new HBox(10) {
 											{
 												this.setPadding(new Insets(0, 25, 0, 25));
 												this.getChildren().add(new Label("Fat:"));
-												this.getChildren().add(new TextField());
+												this.getChildren().add(fields[6] = new TextField());
 											}
 										});
 										this.getChildren().add(new HBox(10) {
 											{
 												this.setPadding(new Insets(0, 25, 0, 25));
-												this.getChildren().add(new Button("Apply"));
+												this.getChildren().add(apply);
 												this.getChildren().add(new Button("Close"));
 											}
 										});
@@ -324,9 +353,14 @@ public class Main extends Application {
 			HBox button = new HBox(10);
 			Button na = new Button("Apply");
 			na.setOnAction(e -> {
-				for(FormType f : forms) {
-					f.filter(true);
+				List<FoodItem> list = new ArrayList<>(foodData.getAllFoodItems());
+				for (FormType f : forms) {
+					if(f.isSelected())
+						f.filter(true, list);
 				}
+				ObservableList<FoodItem> items = FXCollections.observableArrayList(list);
+				listOfFoods.setItems(items);
+				numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
 			});
 			button.getChildren().addAll(na);
 			Button help = new Button("Help");
