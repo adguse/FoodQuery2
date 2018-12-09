@@ -265,25 +265,33 @@ public class Main extends Application {
 										xAxis.setLabel("Nutrient");
 										NumberAxis yAxis = new NumberAxis();
 										yAxis.setLabel("Total");
-										BarChart nutriAnalysis = new BarChart(xAxis, yAxis);
+										BarChart<String, Double> nutriAnalysis = new BarChart(xAxis, yAxis);
 										nutriAnalysis.setPrefHeight(400);
 										nutriAnalysis.setPrefWidth(500);
-										XYChart.Series dataSeries1 = new XYChart.Series();
+										XYChart.Series<String, Double> dataSeries1 = new XYChart.Series();
 										dataSeries1.setName("Nutrients within Selected Meal List");
 										mealList.nutriAnalysis();
 										dataSeries1.getData()
-												.add(new XYChart.Data("Calories", mealList.getTotalCals()));
+												.add(new XYChart.Data<String, Double>("Calories", mealList.getTotalCals()));
 										dataSeries1.getData()
-												.add(new XYChart.Data("Fat (grams)", mealList.getTotalFat()));
+												.add(new XYChart.Data<String, Double>("Fat (grams)", mealList.getTotalFat()));
 										dataSeries1.getData()
-												.add(new XYChart.Data("Carbs (grams)", mealList.getTotalCarbs()));
+												.add(new XYChart.Data<String, Double>("Carbs (grams)", mealList.getTotalCarbs()));
 										dataSeries1.getData()
-												.add(new XYChart.Data("Fiber (grams)", mealList.getTotalFiber()));
+												.add(new XYChart.Data<String, Double>("Fiber (grams)", mealList.getTotalFiber()));
 										dataSeries1.getData()
-												.add(new XYChart.Data("Protein (grams)", mealList.getTotalProtein()));
+												.add(new XYChart.Data<String, Double>("Protein (grams)", mealList.getTotalProtein()));
 										nutriAnalysis.getData().add(dataSeries1);
-										popupPane.getChildren().add(nutriAnalysis);
-										Scene scene = new Scene(popupPane, 600, 400);
+										HBox information = new HBox();
+										information.getChildren().add(nutriAnalysis);
+										ListView amountSum = new ListView();
+										ObservableList<String> items =FXCollections.observableArrayList (
+										    "Calories: " + mealList.getTotalCals(), "Fat (grams): " + mealList.getTotalFat(), "Carbs (grams): " + mealList.getTotalCarbs(),
+										    "Fiber (grams): " + mealList.getTotalFiber(), "Protein (grams): " + mealList.getTotalProtein());
+										amountSum.setItems(items);
+										information.getChildren().add(amountSum);
+										popupPane.getChildren().addAll(information);
+										Scene scene = new Scene(popupPane, 800, 400);
 										popupStage.setScene(scene);
 										popupStage.show();
 									});
