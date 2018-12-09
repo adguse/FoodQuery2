@@ -46,15 +46,11 @@ public class Main extends Application {
 	public FormType[] forms = new FormType[6];
 	public TextField[] fields = new TextField[7];
 	public Button apply = new Button("Apply");
-	public static Comparator<FoodItem> lexicographicOrder = new Comparator<FoodItem>() {
+	public static Comparator<FoodItem> lexicographicOrder = (e,e1)->{
+		return e.getName().compareTo(e1.getName());
+	};
+	public Stage popupStage = new Stage();
 
-		@Override
-		public int compare(FoodItem arg0, FoodItem arg1) {
-			return arg0.getName().compareTo(arg1.getName());
-		}
-    	
-    };
-    public Stage popupStage = new Stage();
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -85,12 +81,15 @@ public class Main extends Application {
 						FileChooser fileChooser = new FileChooser();
 						fileChooser.setTitle("Open Resource File");
 						file = fileChooser.showOpenDialog(null);
-						t.setText(file.getName());
-						foodData = new FoodData();
-						foodData.loadFoodItems(file.getAbsolutePath());
-						ObservableList<FoodItem> items = FXCollections.observableArrayList(foodData.getAllFoodItems());
-						listOfFoods.setItems(items);
-						numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
+						if (file != null) {
+							t.setText(file.getName());
+							foodData = new FoodData();
+							foodData.loadFoodItems(file.getAbsolutePath());
+							ObservableList<FoodItem> items = FXCollections
+									.observableArrayList(foodData.getAllFoodItems());
+							listOfFoods.setItems(items);
+							numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
+						}
 					});
 				}
 			});
@@ -138,11 +137,11 @@ public class Main extends Application {
 							this.setOnAction(e -> {
 								apply.setOnAction(ee -> {
 									FoodItem f = new FoodItem(fields[1].getText(), fields[0].getText().toLowerCase());
-									f.addNutrient("calories", Double.parseDouble(fields[2].getText()));
-									f.addNutrient("carbohydrate", Double.parseDouble(fields[3].getText()));
-									f.addNutrient("protein", Double.parseDouble(fields[4].getText()));
-									f.addNutrient("fiber", Double.parseDouble(fields[5].getText()));
-									f.addNutrient("fat", Double.parseDouble(fields[6].getText()));
+									f.addNutrient("Calories", Double.parseDouble(fields[2].getText()));
+									f.addNutrient("Carbohydrate", Double.parseDouble(fields[3].getText()));
+									f.addNutrient("Protein", Double.parseDouble(fields[4].getText()));
+									f.addNutrient("Fiber", Double.parseDouble(fields[5].getText()));
+									f.addNutrient("Fat", Double.parseDouble(fields[6].getText()));
 									listOfFoods.getItems().add(f);
 									listOfFoods.getItems().sort(lexicographicOrder);
 									foodData.addFoodItem(f);
@@ -293,10 +292,6 @@ public class Main extends Application {
 							});
 						}
 					});
-//                    Label analysis = new Label("Nutritional Analysis");
-//                    analysis.setFont(new Font("Arial", 30));
-//                    this.getChildren().add(analysis);
-
 				}
 			});
 			root.setRight(meal);
@@ -334,7 +329,7 @@ public class Main extends Application {
 			na.setOnAction(e -> {
 				List<FoodItem> list = new ArrayList<>(foodData.getAllFoodItems());
 				for (FormType f : forms) {
-					if(f.isSelected())
+					if (f.isSelected())
 						f.filter(true, list);
 				}
 				ObservableList<FoodItem> items = FXCollections.observableArrayList(list);
