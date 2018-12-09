@@ -2,15 +2,8 @@ package application;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
-import com.sun.javafx.geom.BaseBounds;
-import com.sun.javafx.geom.transform.BaseTransform;
-import com.sun.javafx.jmx.MXNodeAlgorithm;
-import com.sun.javafx.jmx.MXNodeAlgorithmContext;
-import com.sun.javafx.sg.prism.NGNode;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -21,14 +14,12 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -97,7 +88,6 @@ public class Main extends Application {
 						t.setText(file.getName());
 						foodData = new FoodData();
 						foodData.loadFoodItems(file.getAbsolutePath());
-						String[] names = new String[foodData.getAllFoodItems().size()];
 						ObservableList<FoodItem> items = FXCollections.observableArrayList(foodData.getAllFoodItems());
 						listOfFoods.setItems(items);
 						numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
@@ -317,25 +307,6 @@ public class Main extends Application {
 			middleLeft.setPadding(new Insets(10, 50, 0, 0));
 			middleLeft.setMaxHeight(400);
 			middleLeft.setMaxWidth(200);
-//			middleLeft.getChildren().add(new VBox(10) {
-//				{
-//					this.getChildren().add(checkboxes[0] = new CheckBox("Name Filter"));
-//					this.getChildren().add(fields[0] = new TextField() {
-//						{
-//							this.setOnAction(e -> {
-//								ObservableList<FoodItem> items = FXCollections
-//										.observableArrayList(foodData.filterByName(this.getText()));
-//								listOfFoods.setItems(items);
-//								numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
-//							});
-//						}
-//					});
-//					this.getChildren().add(checkboxes[1] = new CheckBox("Calorie Filter"));
-//					this.getChildren().add(fields[1] = new TextField());
-//					this.getChildren().add(checkboxes[2] = new CheckBox("Carb Filter"));
-//					this.getChildren().add(fields[2] = new TextField());
-//				}
-//			});
 			middleLeft.getChildren().add(new VBox(10) {
 				{
 					this.getChildren().add(forms[0] = new FormType("Name Filter"));
@@ -348,12 +319,6 @@ public class Main extends Application {
 			middleRight.setMaxWidth(200);
 			middleRight.getChildren().add(new VBox(10) {
 				{
-//					this.getChildren().add(new CheckBox("Protein Filter"));
-//					this.getChildren().add(new TextField());
-//					this.getChildren().add(new CheckBox("Fiber Filter"));
-//					this.getChildren().add(new TextField());
-//					this.getChildren().add(new CheckBox("Fat Filter"));
-//					this.getChildren().add(new TextField());
 					this.getChildren().add(forms[3] = new FormType("Protein Filter"));
 					this.getChildren().add(forms[4] = new FormType("Fiber Filter"));
 					this.getChildren().add(forms[5] = new FormType("Fat Filter"));
