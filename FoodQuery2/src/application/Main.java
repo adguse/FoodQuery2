@@ -284,14 +284,17 @@ public class Main extends Application {
 										nutriAnalysis.getData().add(dataSeries1);
 										HBox information = new HBox();
 										information.getChildren().add(nutriAnalysis);
-										ListView amountSum = new ListView();
-										ObservableList<String> items =FXCollections.observableArrayList (
-										    "Calories: " + mealList.getTotalCals(), "Fat (grams): " + mealList.getTotalFat(), "Carbs (grams): " + mealList.getTotalCarbs(),
-										    "Fiber (grams): " + mealList.getTotalFiber(), "Protein (grams): " + mealList.getTotalProtein());
-										amountSum.setItems(items);
+										VBox amountSum = new VBox();
+										amountSum.setPadding(new Insets(120,0,0,50));
+										Label cals = new Label("Calories: " + mealList.getTotalCals());
+										Label fat = new Label("Fat: " + mealList.getTotalFat());
+										Label carbs = new Label("Carbs: " + mealList.getTotalCarbs());
+										Label fiber = new Label("Fiber: " + mealList.getTotalFiber());
+										Label protein = new Label("Protein: " + mealList.getTotalProtein());
+										amountSum.getChildren().addAll(cals,fat,carbs,fiber,protein);
 										information.getChildren().add(amountSum);
 										popupPane.getChildren().addAll(information);
-										Scene scene = new Scene(popupPane, 800, 400);
+										Scene scene = new Scene(popupPane, 700, 400);
 										popupStage.setScene(scene);
 										popupStage.show();
 									});
