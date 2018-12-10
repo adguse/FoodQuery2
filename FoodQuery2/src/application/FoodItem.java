@@ -62,8 +62,9 @@ public class FoodItem {
      * If nutrient already exists, updates its value.
      */
     public void addNutrient(String name, double value) {
+        //checks if the nutrient already exits
         if(this.nutrients.containsKey(name)) {
-            this.nutrients.remove(name);
+            this.nutrients.remove(name); //updates its value
             this.nutrients.put(name, value);
         }
         else {
@@ -79,7 +80,7 @@ public class FoodItem {
         if(this.nutrients.containsKey(name)) {
             return this.nutrients.get(name);
         }
-        return 0;
+        return 0; //returns 0 if the nutrient is not present
     }
     
     public String toString() {
