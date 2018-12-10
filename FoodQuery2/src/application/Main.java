@@ -20,6 +20,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -33,7 +34,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
 public class Main extends Application {
 	public File file = null;
@@ -46,7 +46,7 @@ public class Main extends Application {
 	public FormType[] forms = new FormType[6];
 	public TextField[] fields = new TextField[7];
 	public Button apply = new Button("Apply");
-	public static Comparator<FoodItem> lexicographicOrder = (e,e1)->{
+	public static Comparator<FoodItem> lexicographicOrder = (e, e1) -> {
 		return e.getName().compareTo(e1.getName());
 	};
 	public Stage popupStage = new Stage();
@@ -67,21 +67,33 @@ public class Main extends Application {
 			});
 			foodData = new FoodData();
 			Menu helpMenu = new Menu("Help");
-			helpMenu.getItems().add(new MenuItem("About"));
+			helpMenu.getItems().add(new CustomMenuItem(new Label("About")) {
+			{
+				Tooltip about = new Tooltip("Welcome to Choose to Lose — a program that allows you to add various food items \n "
+						+ "to a meal and view the nutritional facts of that meal. Our mission is to inspire conscious eating which can lead to a \n "
+						+ "healthier and happier life. Let’s get started!");
+				Tooltip.install(this.getContent(), about);
+				
+			}
+			});
 			bar.getMenus().add(fileMenu);
 			bar.getMenus().add(helpMenu);
 			// root.setPadding(new Insets(40, 20, 10, 40));
 			HBox h = new HBox(10);
 			h.setAlignment(Pos.CENTER_LEFT);
 			TextField t = new TextField();
-			h.getChildren().add(new Label("Selected File:"));
+			h.getChildren().add(new Label("Select a File:") {
+				{
+					this.getStyleClass().add("filters");
+				}
+			});
 			h.getChildren().add(t);
 			h.getChildren().add(new Button("Browse") {
 				{
 					this.setOnAction(e -> {
 						FileChooser fileChooser = new FileChooser();
 						fileChooser.setTitle("Open Resource File");
-						if(file != null) {
+						if (file != null) {
 							fileChooser.setInitialDirectory(file.getParentFile());
 						}
 						File choosenFile = fileChooser.showOpenDialog(null);
@@ -99,12 +111,17 @@ public class Main extends Application {
 				}
 			});
 			HBox title = new HBox(10);
-			Label titleOfApp = new Label("Welcome to Weight Watchers 2.0");
-			titleOfApp.setFont(new Font("Arial", 40));
-			title.getChildren().add(titleOfApp);
-			title.setPadding(new Insets(0, 0, 0, 150));
+			VBox name = new VBox(10);
+			Label titleOfApp = new Label("Choose to Lose");
+			titleOfApp.getStyleClass().add("title");
+			name.getChildren().add(titleOfApp);
+			Label slogan = new Label("   The first step towards a happier and healthier life...");
+			slogan.getStyleClass().add("slogan");
+			name.getChildren().add(slogan);
+			title.getChildren().add(name);
+			title.setPadding(new Insets(0, 0, 0, 125));
 			h.getChildren().add(title);
-			h.setPadding(new Insets(15, 20, 10, 40));
+			h.setPadding(new Insets(15, 20, 0, 40));
 			VBox v = new VBox();
 			// v.setPadding(new Insets(40, 20, 10, 40));
 			v.setSpacing(40);
@@ -118,13 +135,16 @@ public class Main extends Application {
 			main.getChildren().add(new VBox(10) {
 				{
 					Label smallTitle = new Label("List Of Foods");
-					smallTitle.setFont(new Font("Arial", 30));
+					smallTitle.setPadding(new Insets(0, 0, 0, 50));
+					smallTitle.getStyleClass().add("white-labels");
 					this.getChildren().add(smallTitle);
 					listOfFoods = new ListView<FoodItem>();
 					listOfFoods.setMinHeight(400);
 					listOfFoods.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 					this.getChildren()
 							.add(numberLabel = new Label("# of items in Food List: " + listOfFoods.getItems().size()));
+					numberLabel.setPadding(new Insets(0, 0, 5, 22));
+					numberLabel.getStyleClass().add("number-of-foods");
 					this.getChildren().add(listOfFoods);
 					this.getChildren().add(new Button("Add Selected Foods to Meal List") {
 						{
@@ -239,11 +259,11 @@ public class Main extends Application {
 			meal.getChildren().add(new VBox(20) {
 				{
 					Label selectedFoods = new Label("Selected Foods for Meal");
-					selectedFoods.setAlignment(Pos.CENTER_RIGHT);
-					selectedFoods.setFont(new Font("Arial", 30));
+					selectedFoods.getStyleClass().add("white-labels");
+					selectedFoods.setPadding(new Insets(20, 0, 0, 50));
 					this.getChildren().add(selectedFoods);
 					mealViewer = new ListView<FoodItem>();
-					mealViewer.setPrefHeight(900);
+					mealViewer.setPrefHeight(425);
 					mealViewer.setPrefWidth(400);
 					mealViewer.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 					this.getChildren().add(mealViewer);
@@ -278,27 +298,27 @@ public class Main extends Application {
 										XYChart.Series<String, Double> dataSeries1 = new XYChart.Series();
 										dataSeries1.setName("Nutrients within Selected Meal List");
 										mealList.nutriAnalysis();
-										dataSeries1.getData()
-												.add(new XYChart.Data<String, Double>("Calories", mealList.getTotalCals()));
-										dataSeries1.getData()
-												.add(new XYChart.Data<String, Double>("Fat (grams)", mealList.getTotalFat()));
-										dataSeries1.getData()
-												.add(new XYChart.Data<String, Double>("Carbs (grams)", mealList.getTotalCarbs()));
-										dataSeries1.getData()
-												.add(new XYChart.Data<String, Double>("Fiber (grams)", mealList.getTotalFiber()));
-										dataSeries1.getData()
-												.add(new XYChart.Data<String, Double>("Protein (grams)", mealList.getTotalProtein()));
+										dataSeries1.getData().add(
+												new XYChart.Data<String, Double>("Calories", mealList.getTotalCals()));
+										dataSeries1.getData().add(new XYChart.Data<String, Double>("Fat (grams)",
+												mealList.getTotalFat()));
+										dataSeries1.getData().add(new XYChart.Data<String, Double>("Carbs (grams)",
+												mealList.getTotalCarbs()));
+										dataSeries1.getData().add(new XYChart.Data<String, Double>("Fiber (grams)",
+												mealList.getTotalFiber()));
+										dataSeries1.getData().add(new XYChart.Data<String, Double>("Protein (grams)",
+												mealList.getTotalProtein()));
 										nutriAnalysis.getData().add(dataSeries1);
 										HBox information = new HBox();
 										information.getChildren().add(nutriAnalysis);
 										VBox amountSum = new VBox();
-										amountSum.setPadding(new Insets(120,0,0,50));
+										amountSum.setPadding(new Insets(120, 0, 0, 50));
 										Label cals = new Label("Calories: " + mealList.getTotalCals());
 										Label fat = new Label("Fat: " + mealList.getTotalFat());
 										Label carbs = new Label("Carbs: " + mealList.getTotalCarbs());
 										Label fiber = new Label("Fiber: " + mealList.getTotalFiber());
 										Label protein = new Label("Protein: " + mealList.getTotalProtein());
-										amountSum.getChildren().addAll(cals,fat,carbs,fiber,protein);
+										amountSum.getChildren().addAll(cals, fat, carbs, fiber, protein);
 										information.getChildren().add(amountSum);
 										popupPane.getChildren().addAll(information);
 										Scene scene = new Scene(popupPane, 700, 400);
@@ -347,14 +367,14 @@ public class Main extends Application {
 			na.setOnAction(e -> {
 				List<FoodItem> list = new ArrayList<>(foodData.getAllFoodItems());
 				List<String> filters = new ArrayList<>();
-				for(int i = 1; i < forms.length; i++) {
+				for (int i = 1; i < forms.length; i++) {
 					filters.add(forms[i].getText());
 				}
 
 				System.out.println(list);
 				forms[1].filter(list, filters);
-				//System.out.println(list);
-				//forms[0].filter(list);
+				// System.out.println(list);
+				// forms[0].filter(list);
 				ObservableList<FoodItem> items = FXCollections.observableArrayList(list);
 				listOfFoods.setItems(items);
 				numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());

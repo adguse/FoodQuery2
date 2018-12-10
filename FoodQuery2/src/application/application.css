@@ -1,1 +1,46 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.white-labels {
+	-fx-text-fill: #004d99;
+	-fx-font-family: "Georgia";
+	-fx-font-size: 24px;
+	-fx-alignment: center;
+}
+
+.root {
+	-fx-background-color: #b0c4de;
+}
+
+.title {
+	-fx-text-fill: #ffffff;
+	-fx-font-weight: 900;
+	-fx-font-family: "Georgia";
+	-fx-font-size: 72px;
+}
+
+.number-of-foods {
+	-fx-text-fill: #004d99;
+	-fx-font-family: "Georgia";
+	-fx-font-size: 18px;
+}
+
+.filters {
+	-fx-text-fill: #004d99;
+	-fx-font-family: "Georgia";
+	-fx-font-size: 15px;
+}
+
+.button {
+	-fx-font-family: "Georgia";
+	-fx-font-size: 12px;
+}
+
+.slogan {
+	-fx-text-fill: #ffffff;
+	-fx-font-family: "Georgia";
+	-fx-font-size: 22px;
+	-fx-alignment: center;
+}
+
+.popup-background {
+	-fx-background-color: #c6ecc6;
+}

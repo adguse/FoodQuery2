@@ -15,8 +15,16 @@ public class FormType extends VBox {
 
 	public FormType(String field) {
 		super(10);
-		this.getChildren().add(checkbox = new CheckBox(field));
-		this.getChildren().add(textField = new TextField());
+		this.getChildren().add(checkbox = new CheckBox(field) {
+		{
+			this.getStyleClass().add("filters");
+		}
+		});
+		this.getChildren().add(textField = new TextField() {
+		{
+			this.getStyleClass().add("filters");
+		}
+		});
 		textField.setDisable(true);
 		checkbox.setOnAction(e -> {
 			textField.setDisable(!textField.isDisabled());
