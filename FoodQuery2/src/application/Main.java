@@ -65,6 +65,7 @@ public class Main extends Application {
 					});
 				}
 			});
+			foodData = new FoodData();
 			Menu helpMenu = new Menu("Help");
 			helpMenu.getItems().add(new MenuItem("About"));
 			bar.getMenus().add(fileMenu);
@@ -80,8 +81,12 @@ public class Main extends Application {
 					this.setOnAction(e -> {
 						FileChooser fileChooser = new FileChooser();
 						fileChooser.setTitle("Open Resource File");
-						file = fileChooser.showOpenDialog(null);
-						if (file != null) {
+						if(file != null) {
+							fileChooser.setInitialDirectory(file.getParentFile());
+						}
+						File choosenFile = fileChooser.showOpenDialog(null);
+						if (choosenFile != null) {
+							file = choosenFile;
 							t.setText(file.getName());
 							foodData = new FoodData();
 							foodData.loadFoodItems(file.getAbsolutePath());
@@ -137,14 +142,16 @@ public class Main extends Application {
 							this.setOnAction(e -> {
 								apply.setOnAction(ee -> {
 									FoodItem f = new FoodItem(fields[1].getText(), fields[0].getText().toLowerCase());
-									f.addNutrient("Calories", Double.parseDouble(fields[2].getText()));
-									f.addNutrient("Carbohydrate", Double.parseDouble(fields[3].getText()));
-									f.addNutrient("Protein", Double.parseDouble(fields[4].getText()));
-									f.addNutrient("Fiber", Double.parseDouble(fields[5].getText()));
-									f.addNutrient("Fat", Double.parseDouble(fields[6].getText()));
+									f.addNutrient("calories", Double.parseDouble(fields[2].getText()));
+									f.addNutrient("carbohydrate", Double.parseDouble(fields[3].getText()));
+									f.addNutrient("protein", Double.parseDouble(fields[4].getText()));
+									f.addNutrient("fiber", Double.parseDouble(fields[5].getText()));
+									f.addNutrient("fat", Double.parseDouble(fields[6].getText()));
 									listOfFoods.getItems().add(f);
 									listOfFoods.getItems().sort(lexicographicOrder);
 									foodData.addFoodItem(f);
+									numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
+									popupStage.close();
 								});
 								AnchorPane popupPane = new AnchorPane();
 								popupPane.setMaxHeight(400);
@@ -339,9 +346,13 @@ public class Main extends Application {
 			Button na = new Button("Apply");
 			na.setOnAction(e -> {
 				List<FoodItem> list = new ArrayList<>(foodData.getAllFoodItems());
-				for (FormType f : forms) {
-					if (f.isSelected())
-						f.filter(true, list);
+				List<String> filters = new ArrayList<>();
+				for(int i = 1; i < forms.length; i++) {
+					filters.add(forms[i].getText());
+				}
+				forms[0].filter(list);
+				for (int i = 1; i < forms.length; i++) {
+					forms[i].filter(list, filters);
 				}
 				ObservableList<FoodItem> items = FXCollections.observableArrayList(list);
 				listOfFoods.setItems(items);
