@@ -23,28 +23,37 @@ public class FormType extends VBox {
 		});
 	}
 
-	public void filter(boolean type, List<FoodItem> list) {
+	public void filter(List<FoodItem> list, List<String> filters) {
 		if (checkbox.isSelected()) {
-			if (type) {
-				List<FoodItem> filtered = Main.foodData.filterByName(textField.getText());
-				
-				for (int i = 0; i < list.size(); i++) {
-					if (!filtered.contains(list.get(i))) {
-						list.remove(i);
-						i--;
-					}
-				}
-			} else {
+			List<FoodItem> filtered = Main.foodData.filterByNutrients(filters);
 
+			for (int i = 0; i < list.size(); i++) {
+				if (!filtered.contains(list.get(i))) {
+					list.remove(i);
+					i--;
+				}
 			}
 		}
 	}
-	
+
+	public void filter(List<FoodItem> list) {
+		if (checkbox.isSelected()) {
+			List<FoodItem> filtered = Main.foodData.filterByName(textField.getText());
+
+			for (int i = 0; i < list.size(); i++) {
+				if (!filtered.contains(list.get(i))) {
+					list.remove(i);
+					i--;
+				}
+			}
+		}
+	}
+
 	public boolean isSelected() {
 		return checkbox.isSelected();
 	}
 
 	public String getText() {
-		return textField.getText();
+		return textField.getText().trim();
 	}
 }

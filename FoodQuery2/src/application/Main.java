@@ -65,6 +65,7 @@ public class Main extends Application {
 					});
 				}
 			});
+			foodData = new FoodData();
 			Menu helpMenu = new Menu("Help");
 			helpMenu.getItems().add(new MenuItem("About"));
 			bar.getMenus().add(fileMenu);
@@ -80,8 +81,12 @@ public class Main extends Application {
 					this.setOnAction(e -> {
 						FileChooser fileChooser = new FileChooser();
 						fileChooser.setTitle("Open Resource File");
-						file = fileChooser.showOpenDialog(null);
-						if (file != null) {
+						if(file != null) {
+							fileChooser.setInitialDirectory(file.getParentFile());
+						}
+						File choosenFile = fileChooser.showOpenDialog(null);
+						if (choosenFile != null) {
+							file = choosenFile;
 							t.setText(file.getName());
 							foodData = new FoodData();
 							foodData.loadFoodItems(file.getAbsolutePath());
@@ -145,6 +150,8 @@ public class Main extends Application {
 									listOfFoods.getItems().add(f);
 									listOfFoods.getItems().sort(lexicographicOrder);
 									foodData.addFoodItem(f);
+									numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
+									popupStage.close();
 								});
 								AnchorPane popupPane = new AnchorPane();
 								popupPane.setMaxHeight(400);
@@ -339,9 +346,13 @@ public class Main extends Application {
 			Button na = new Button("Apply");
 			na.setOnAction(e -> {
 				List<FoodItem> list = new ArrayList<>(foodData.getAllFoodItems());
-				for (FormType f : forms) {
-					if (f.isSelected())
-						f.filter(true, list);
+				List<String> filters = new ArrayList<>();
+				for(int i = 1; i < forms.length; i++) {
+					filters.add(forms[i].getText());
+				}
+				forms[0].filter(list);
+				for (int i = 1; i < forms.length; i++) {
+					forms[i].filter(list, filters);
 				}
 				ObservableList<FoodItem> items = FXCollections.observableArrayList(list);
 				listOfFoods.setItems(items);
