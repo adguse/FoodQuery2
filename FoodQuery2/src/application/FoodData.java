@@ -109,7 +109,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     public List<FoodItem> filterByNutrients(List<String> rules) {
     	List<FoodItem> nutrientFilters = new ArrayList<FoodItem>();
     	for (int i = 0; i < rules.size(); ++i) {
-    		if (!(rules.get(i).equals(""))) {
+    		if (!(rules.get(i).trim().equals(""))) {
     			String[] tokens = rules.get(i).split(" ");
     			String comparator = tokens[0];
     			double key = Double.parseDouble(tokens[1]);
