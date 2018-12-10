@@ -379,7 +379,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		 * @see BPTree.Node#rangeSearch(Comparable, String)
 		 */
 		List<V> rangeSearch(K key, String comparator) {
-			List<V> built = null;
+			List<V> built = new LinkedList<V>();
 
 			switch (comparator) {
 			case "<=":
