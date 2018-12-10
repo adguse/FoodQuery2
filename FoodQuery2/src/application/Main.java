@@ -142,11 +142,11 @@ public class Main extends Application {
 							this.setOnAction(e -> {
 								apply.setOnAction(ee -> {
 									FoodItem f = new FoodItem(fields[1].getText(), fields[0].getText().toLowerCase());
-									f.addNutrient("Calories", Double.parseDouble(fields[2].getText()));
-									f.addNutrient("Carbohydrate", Double.parseDouble(fields[3].getText()));
-									f.addNutrient("Protein", Double.parseDouble(fields[4].getText()));
-									f.addNutrient("Fiber", Double.parseDouble(fields[5].getText()));
-									f.addNutrient("Fat", Double.parseDouble(fields[6].getText()));
+									f.addNutrient("calories", Double.parseDouble(fields[2].getText()));
+									f.addNutrient("carbohydrate", Double.parseDouble(fields[3].getText()));
+									f.addNutrient("protein", Double.parseDouble(fields[4].getText()));
+									f.addNutrient("fiber", Double.parseDouble(fields[5].getText()));
+									f.addNutrient("fat", Double.parseDouble(fields[6].getText()));
 									listOfFoods.getItems().add(f);
 									listOfFoods.getItems().sort(lexicographicOrder);
 									foodData.addFoodItem(f);
