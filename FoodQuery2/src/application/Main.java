@@ -62,9 +62,14 @@ public class Main extends Application {
 	};
 	private static final EventHandler<ActionEvent> HelpDialog = e -> {
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Information Dialog");
-		alert.setHeaderText("Look, an Information Dialog");
-		alert.setContentText("I have a great message for you!");
+		alert.setTitle("About");
+		alert.setHeaderText("What is Choose to Lose?");
+		alert.setContentText(
+				"Welcome to Choose to Lose! Choose to lose is program that allows you to view the nutritional facts of a meal "
+						+ "created by you. To begin, upload a file from your computer to create a list of foods or individually add food items using "
+						+ "the add to food list button. To search for certain foods in your list, use the name and nutritional filters to the right of the food list. "
+						+ "Once you find a food you like, add it to your meal list. Finally, to view the "
+						+ "nutritional facts of a food item or your meal, use the Analyze Nutritional Analysis button below the meal list. Let's get started!");
 
 		alert.showAndWait();
 	};
@@ -92,7 +97,9 @@ public class Main extends Application {
 						}
 						File choosenFile = fileChooser.showSaveDialog(null);
 						if (choosenFile != null) {
-							foodData.saveFoodItems(choosenFile.getAbsolutePath().contains(".") ? choosenFile.getAbsolutePath() : choosenFile.getAbsolutePath()+".csv");
+							foodData.saveFoodItems(
+									choosenFile.getAbsolutePath().contains(".") ? choosenFile.getAbsolutePath()
+											: choosenFile.getAbsolutePath() + ".csv");
 							saveFile = choosenFile;
 						}
 
@@ -110,11 +117,6 @@ public class Main extends Application {
 			Menu helpMenu = new Menu("Help");
 			helpMenu.getItems().add(new CustomMenuItem(new Label("About")) {
 				{
-//					Tooltip about = new Tooltip(
-//							"Welcome to Choose to Lose — a program that allows you to add various food items \n "
-//									+ "to a meal and view the nutritional facts of that meal. Our mission is to inspire conscious eating which can lead to a \n "
-//									+ "healthier and happier life. Let’s get started!");
-//					Tooltip.install(this.getContent(), about);
 					this.setOnAction(HelpDialog);
 				}
 			});
@@ -392,12 +394,14 @@ public class Main extends Application {
 				List<FoodItem> list = new ArrayList<>(foodData.getAllFoodItems());
 				List<String> filters = new ArrayList<>();
 				for (int i = 1; i < forms.length; i++) {
-					if(forms[i].isSelected())filters.add(forms[i].getText());
-					else filters.add("");
+					if (forms[i].isSelected())
+						filters.add(forms[i].getText());
+					else
+						filters.add("");
 				}
 				forms[0].filter(list);
 				for (int i = 1; i < forms.length; i++) {
-					if(forms[i].isSelected()) {
+					if (forms[i].isSelected()) {
 						forms[i].filter(list, filters);
 						break;
 					}
@@ -408,8 +412,6 @@ public class Main extends Application {
 			});
 			button.getChildren().addAll(na);
 			Button help = new Button("Help");
-//			help.setTooltip(new Tooltip(
-//					"Select the filters you want by clicking the appropriate checkboxes. Input the correct comparator and number value (Ex: > 50)"));
 			help.setOnAction(HelpDialog);
 			button.getChildren().add(help);
 			button.setPadding(new Insets(10 * HR, 0, 0, 175 * WR));
