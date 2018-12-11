@@ -49,6 +49,8 @@ public class Main extends Application {
 	public FormType[] forms = new FormType[6];
 	public TextField[] fields = new TextField[7];
 	public Button apply = new Button("Apply");
+	private final double WR = (screenSize.getWidth() / 1980);
+	private final double HR = (screenSize.getHeight() / 1080);
 	public static Comparator<FoodItem> lexicographicOrder = (e, e1) -> {
 		return e.getName().compareTo(e1.getName());
 	};
@@ -113,8 +115,8 @@ public class Main extends Application {
 					});
 				}
 			});
-			HBox title = new HBox(10);
-			VBox name = new VBox(10);
+			HBox title = new HBox(10 * WR);
+			VBox name = new VBox(10 * HR);
 			Label titleOfApp = new Label("Choose to Lose");
 			titleOfApp.getStyleClass().add("title");
 			name.getChildren().add(titleOfApp);
@@ -122,9 +124,9 @@ public class Main extends Application {
 			slogan.getStyleClass().add("slogan");
 			name.getChildren().add(slogan);
 			title.getChildren().add(name);
-			title.setPadding(new Insets(0, 0, 0, 125));
+			title.setPadding(new Insets(0, 0, 0, 125*WR));
 			h.getChildren().add(title);
-			h.setPadding(new Insets(15, 20, 0, 40));
+			h.setPadding(new Insets(15*HR, 20, 0, 40*WR));
 			VBox v = new VBox();
 			// v.setPadding(new Insets(40, 20, 10, 40));
 			v.setSpacing(40);
@@ -132,21 +134,21 @@ public class Main extends Application {
 			v.getChildren().add(h);
 			v.getChildren().add(new Separator(Orientation.HORIZONTAL));
 			HBox main = new HBox(10);
-			main.setPadding(new Insets(10, 0, 0, 50));
-			main.setMaxHeight(400);
-			main.setMaxWidth(400);
-			main.getChildren().add(new VBox(10) {
+			main.setPadding(new Insets(10*HR, 0, 0, 50*WR));
+			main.setMaxHeight(400*HR);
+			main.setMaxWidth(400*WR);
+			main.getChildren().add(new VBox(10*HR) {
 				{
 					Label smallTitle = new Label("List Of Foods");
-					smallTitle.setPadding(new Insets(0, 0, 0, 50));
+					smallTitle.setPadding(new Insets(0, 0, 0, 50*WR));
 					smallTitle.getStyleClass().add("white-labels");
 					this.getChildren().add(smallTitle);
 					listOfFoods = new ListView<FoodItem>();
-					listOfFoods.setMinHeight(400);
+					listOfFoods.setMinHeight(400*HR);
 					listOfFoods.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 					this.getChildren()
 							.add(numberLabel = new Label("# of items in Food List: " + listOfFoods.getItems().size()));
-					numberLabel.setPadding(new Insets(0, 0, 5, 22));
+					numberLabel.setPadding(new Insets(0, 0, 5*HR, 22*WR));
 					numberLabel.getStyleClass().add("number-of-foods");
 					this.getChildren().add(listOfFoods);
 					this.getChildren().add(new Button("Add Selected Foods to Meal List") {
@@ -177,62 +179,62 @@ public class Main extends Application {
 									popupStage.close();
 								});
 								AnchorPane popupPane = new AnchorPane();
-								popupPane.setMaxHeight(400);
-								popupPane.setMaxWidth(400);
-								popupPane.getChildren().add(new VBox(10) {
+								popupPane.setMaxHeight(400*HR);
+								popupPane.setMaxWidth(400*WR);
+								popupPane.getChildren().add(new VBox(10*HR) {
 									{
-										this.getChildren().add(new HBox(10) {
+										this.getChildren().add(new HBox(10*WR) {
 											{
-												this.setPadding(new Insets(25, 25, 25, 25));
+												this.setPadding(new Insets(25*HR, 25*WR, 25*HR, 25*WR));
 												this.getChildren().add(new Label("Name:"));
 												this.getChildren().add(fields[0] = new TextField());
 											}
 										});
-										this.getChildren().add(new HBox(10) {
+										this.getChildren().add(new HBox(10*WR) {
 											{
-												this.setPadding(new Insets(0, 25, 0, 25));
+												this.setPadding(new Insets(0, 25*WR, 0, 25*WR));
 												this.getChildren().add(new Label("ID:"));
 												this.getChildren().add(fields[1] = new TextField());
 											}
 										});
-										this.getChildren().add(new HBox(10) {
+										this.getChildren().add(new HBox(10*WR) {
 											{
-												this.setPadding(new Insets(0, 25, 0, 25));
+												this.setPadding(new Insets(0, 25*WR, 0, 25*WR));
 												this.getChildren().add(new Label("Calories:"));
 												this.getChildren().add(fields[2] = new TextField());
 											}
 										});
-										this.getChildren().add(new HBox(10) {
+										this.getChildren().add(new HBox(10*WR) {
 											{
-												this.setPadding(new Insets(0, 25, 0, 25));
+												this.setPadding(new Insets(0, 25*WR, 0, 25*WR));
 												this.getChildren().add(new Label("Carbs:"));
 												this.getChildren().add(fields[3] = new TextField());
 											}
 										});
-										this.getChildren().add(new HBox(10) {
+										this.getChildren().add(new HBox(10*WR) {
 											{
-												this.setPadding(new Insets(0, 25, 0, 25));
+												this.setPadding(new Insets(0, 25*WR, 0, 25*WR));
 												this.getChildren().add(new Label("Protein:"));
 												this.getChildren().add(fields[4] = new TextField());
 											}
 										});
-										this.getChildren().add(new HBox(10) {
+										this.getChildren().add(new HBox(10*WR) {
 											{
-												this.setPadding(new Insets(0, 25, 0, 25));
+												this.setPadding(new Insets(0, 25*WR, 0, 25*WR));
 												this.getChildren().add(new Label("Fiber:"));
 												this.getChildren().add(fields[5] = new TextField());
 											}
 										});
-										this.getChildren().add(new HBox(10) {
+										this.getChildren().add(new HBox(10*WR) {
 											{
-												this.setPadding(new Insets(0, 25, 0, 25));
+												this.setPadding(new Insets(0, 25*WR, 0, 25*WR));
 												this.getChildren().add(new Label("Fat:"));
 												this.getChildren().add(fields[6] = new TextField());
 											}
 										});
-										this.getChildren().add(new HBox(10) {
+										this.getChildren().add(new HBox(10*WR) {
 											{
-												this.setPadding(new Insets(0, 25, 0, 25));
+												this.setPadding(new Insets(0, 25*WR, 0, 25*WR));
 												this.getChildren().add(apply);
 												this.getChildren().add(new Button("Close") {
 													{
@@ -245,7 +247,7 @@ public class Main extends Application {
 										});
 									}
 								});
-								Scene scene = new Scene(popupPane, 400, 400);
+								Scene scene = new Scene(popupPane, 400*WR, 400*HR);
 								popupStage.setScene(scene);
 								popupStage.show();
 							});
@@ -255,23 +257,23 @@ public class Main extends Application {
 			});
 			root.setLeft(main);
 			root.setTop(v);
-			HBox meal = new HBox(10);
-			meal.setPadding(new Insets(10, 50, 0, 0));
-			meal.setMaxHeight(600);
-			meal.setMaxWidth(400);
-			meal.getChildren().add(new VBox(20) {
+			HBox meal = new HBox(10*WR);
+			meal.setPadding(new Insets(10*HR, 50*WR, 0, 0));
+			meal.setMaxHeight(600*HR);
+			meal.setMaxWidth(400*WR);
+			meal.getChildren().add(new VBox(20*HR) {
 				{
 					Label selectedFoods = new Label("Selected Foods for Meal");
 					selectedFoods.getStyleClass().add("white-labels");
-					selectedFoods.setPadding(new Insets(20, 0, 0, 50));
+					selectedFoods.setPadding(new Insets(20*HR, 0, 0, 50*WR));
 					this.getChildren().add(selectedFoods);
 					mealViewer = new ListView<FoodItem>();
-					mealViewer.setPrefHeight(425);
-					mealViewer.setPrefWidth(400);
+					mealViewer.setPrefHeight(425*HR);
+					mealViewer.setPrefWidth(400*WR);
 					mealViewer.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 					this.getChildren().add(mealViewer);
 
-					this.getChildren().add(new HBox(10) {
+					this.getChildren().add(new HBox(10*WR) {
 						{
 							this.getChildren().add(new Button("Remove From Meal") {
 								{
@@ -289,15 +291,15 @@ public class Main extends Application {
 									this.setOnAction(e -> {
 										Stage popupStage = new Stage();
 										AnchorPane popupPane = new AnchorPane();
-										popupPane.setMaxHeight(400);
-										popupPane.setMaxWidth(900);
+										popupPane.setMaxHeight(400*HR);
+										popupPane.setMaxWidth(900*WR);
 										CategoryAxis xAxis = new CategoryAxis();
 										xAxis.setLabel("Nutrient");
 										NumberAxis yAxis = new NumberAxis();
 										yAxis.setLabel("Total");
 										BarChart<String, Double> nutriAnalysis = new BarChart(xAxis, yAxis);
-										nutriAnalysis.setPrefHeight(400);
-										nutriAnalysis.setPrefWidth(500);
+										nutriAnalysis.setPrefHeight(400*HR);
+										nutriAnalysis.setPrefWidth(500*WR);
 										XYChart.Series<String, Double> dataSeries1 = new XYChart.Series();
 										dataSeries1.setName("Nutrients within Selected Meal List");
 										mealList.nutriAnalysis();
@@ -315,7 +317,7 @@ public class Main extends Application {
 										HBox information = new HBox();
 										information.getChildren().add(nutriAnalysis);
 										VBox amountSum = new VBox();
-										amountSum.setPadding(new Insets(120, 0, 0, 50));
+										amountSum.setPadding(new Insets(120*HR, 0, 0, 50*WR));
 										Label cals = new Label("Calories: " + mealList.getTotalCals());
 										Label fat = new Label("Fat: " + mealList.getTotalFat());
 										Label carbs = new Label("Carbs: " + mealList.getTotalCarbs());
@@ -324,7 +326,7 @@ public class Main extends Application {
 										amountSum.getChildren().addAll(cals, fat, carbs, fiber, protein);
 										information.getChildren().add(amountSum);
 										popupPane.getChildren().addAll(information);
-										Scene scene = new Scene(popupPane, 700, 400);
+										Scene scene = new Scene(popupPane, 700*WR, 400*HR);
 										popupStage.setScene(scene);
 										popupStage.show();
 									});
@@ -336,24 +338,24 @@ public class Main extends Application {
 				}
 			});
 			root.setRight(meal);
-			VBox all = new VBox(10);
-			HBox middle = new HBox(10);
-			VBox middleLeft = new VBox(10);
-			VBox middleRight = new VBox(10);
-			middleLeft.setPadding(new Insets(10, 50, 0, 0));
-			middleLeft.setMaxHeight(400);
-			middleLeft.setMaxWidth(200);
-			middleLeft.getChildren().add(new VBox(10) {
+			VBox all = new VBox(10*HR);
+			HBox middle = new HBox(10*WR);
+			VBox middleLeft = new VBox(10*HR);
+			VBox middleRight = new VBox(10*HR);
+			middleLeft.setPadding(new Insets(10*HR, 50*WR, 0, 0));
+			middleLeft.setMaxHeight(400*HR);
+			middleLeft.setMaxWidth(200*WR);
+			middleLeft.getChildren().add(new VBox(10*HR) {
 				{
 					this.getChildren().add(forms[0] = new FormType("Name Filter"));
 					this.getChildren().add(forms[1] = new FormType("Calorie Filter"));
 					this.getChildren().add(forms[2] = new FormType("Carb Filter"));
 				}
 			});
-			middleRight.setPadding(new Insets(10, 50, 0, 0));
-			middleRight.setMaxHeight(400);
-			middleRight.setMaxWidth(200);
-			middleRight.getChildren().add(new VBox(10) {
+			middleRight.setPadding(new Insets(10*HR, 50*WR, 0, 0));
+			middleRight.setMaxHeight(400*HR);
+			middleRight.setMaxWidth(200*WR);
+			middleRight.getChildren().add(new VBox(10*HR) {
 				{
 					this.getChildren().add(forms[3] = new FormType("Protein Filter"));
 					this.getChildren().add(forms[4] = new FormType("Fiber Filter"));
@@ -361,11 +363,11 @@ public class Main extends Application {
 				}
 			});
 
-			middle.setPadding(new Insets(100, 0, 0, 105));
+			middle.setPadding(new Insets(100*HR, 0, 0, 105*WR));
 			middle.getChildren().add(middleLeft);
 			middle.getChildren().add(middleRight);
 			all.getChildren().add(middle);
-			HBox button = new HBox(10);
+			HBox button = new HBox(10*WR);
 			Button na = new Button("Apply");
 			na.setOnAction(e -> {
 				List<FoodItem> list = new ArrayList<>(foodData.getAllFoodItems());
@@ -388,12 +390,14 @@ public class Main extends Application {
 					"Select the filters you want by clicking the appropriate checkboxes. Input the correct comparator and number value (Ex: > 50)"));
 
 			button.getChildren().add(help);
-			button.setPadding(new Insets(10, 0, 0, 225));
+			button.setPadding(new Insets(10*HR, 0, 0, 225*WR));
 
 			all.getChildren().add(button);
 			root.setCenter(all);
 			
-			Scene scene = new Scene(root, screenSize.getWidth()*.74, screenSize.getHeight()*.78);
+			//Scene scene = new Scene(root, screenSize.getWidth()*.74, screenSize.getHeight()*.78);
+			Scene scene = new Scene(root, 1280*WR, 810*HR);
+			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setOnCloseRequest(e -> {
 				System.exit(1);
