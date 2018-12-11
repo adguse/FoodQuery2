@@ -66,6 +66,13 @@ public class FoodData implements FoodDataADT<FoodItem> {
                 nextUp.getNutrients().put(categories[6], Double.parseDouble(categories[7]));
                 nextUp.getNutrients().put(categories[8], Double.parseDouble(categories[9]));
                 nextUp.getNutrients().put(categories[10], Double.parseDouble(categories[11]));
+                
+                indexes.get("Calories").insert(nextUp.getNutrientValue(categories[2]), nextUp);
+                indexes.get("Fat").insert(nextUp.getNutrientValue(categories[4]), nextUp);
+                indexes.get("Carb").insert(nextUp.getNutrientValue(categories[6]), nextUp);
+                indexes.get("Fiber").insert(nextUp.getNutrientValue(categories[8]), nextUp);
+                indexes.get("Protein").insert(nextUp.getNutrientValue(categories[10]), nextUp);
+                
                 this.foodItemList.add(nextUp);
             }
             this.foodItemList.sort(new Comparator<FoodItem>() {

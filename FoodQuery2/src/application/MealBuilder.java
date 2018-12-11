@@ -66,40 +66,26 @@ public class MealBuilder {
         return totalCals;
     }
 
-    public void setTotalCals(double totalCals) {
-        this.totalCals = totalCals;
-    }
 
     public double getTotalFat() {
         return totalFat;
     }
 
-    public void setTotalFat(double totalFat) {
-        this.totalFat = totalFat;
-    }
 
     public double getTotalCarbs() {
         return totalCarbs;
     }
 
-    public void setTotalCarbs(double totalCarbs) {
-        this.totalCarbs = totalCarbs;
-    }
+
 
     public double getTotalFiber() {
         return totalFiber;
     }
 
-    public void setTotalFiber(double totalFiber) {
-        this.totalFiber = totalFiber;
-    }
 
     public double getTotalProtein() {
         return totalProtein;
     }
 
-    public void setTotalProtein(double totalProtein) {
-        this.totalProtein = totalProtein;
-    }
     
 }
