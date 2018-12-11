@@ -12,6 +12,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 /**
  * This class represents the backend for managing all the operations associated
  * with FoodItems
@@ -118,25 +121,41 @@ public class FoodData implements FoodDataADT<FoodItem> {
 	@Override
 	public List<FoodItem> filterByNutrients(List<String> rules) {
 		List<FoodItem> nutrientFilters = new ArrayList<FoodItem>();
-		Object[] s = indexes.keySet().toArray();
-		Arrays.sort(s);
-		for (int i = 0; i < rules.size(); ++i) {
-			if (!(rules.get(i).trim().equals(""))) {
-				String[] tokens = rules.get(i).split(" ");
-				String comparator = tokens[0];
-				double key = Double.parseDouble(tokens[1]);
-				List<FoodItem> nutrientRangeList = (indexes.get((s[i])).rangeSearch(key, comparator));
-				if (nutrientFilters.isEmpty()) {
-					nutrientFilters = nutrientRangeList;
-				} else {
-					for (int j = 0; j < nutrientFilters.size(); j++) {
-						if (!nutrientRangeList.contains(nutrientFilters.get(j))) {
-							nutrientFilters.remove(nutrientFilters.get(j));
-							j--;
+		try {
+			Object[] s = indexes.keySet().toArray();
+			Arrays.sort(s);
+			for (int i = 0; i < rules.size(); ++i) {
+				if (!(rules.get(i).trim().equals(""))) {
+					String[] arr = rules.get(i).trim().split(",");
+					for (int k = 0; k < arr.length; k++) {
+						String[] tokens = arr[k].trim().split(" ");
+						String comparator = tokens[0];
+						double key = Double.parseDouble(tokens[1]);
+						List<FoodItem> nutrientRangeList = (indexes.get((s[i])).rangeSearch(key, comparator));
+						if (nutrientFilters.isEmpty()) {
+							nutrientFilters = nutrientRangeList;
+						} else {
+							for (int j = 0; j < nutrientFilters.size(); j++) {
+								if (!nutrientRangeList.contains(nutrientFilters.get(j))) {
+									nutrientFilters.remove(nutrientFilters.get(j));
+									j--;
+								}
+							}
 						}
 					}
 				}
 			}
+		} catch (Exception e) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText("Opps, looks like your search criteria isn't in the correct format");
+			alert.setContentText("Remember: the input has 2 parts, each part separated by a space:\n"
+					+ "<comparator>: One of the following comparison operators: <=, >=, ==\n"
+					+ "<value>: a double value\n" + "Format of a rule: <comparator> <value>\n"
+					+ "Multiple rules can contain the same nutrient.\n"
+					+ "Example of a rule for filtering between 50 and 200:\n" + "\">= 50.0,<= 200.0\"\n");
+
+			alert.showAndWait();
 		}
 		return nutrientFilters;
 	}
@@ -149,6 +168,11 @@ public class FoodData implements FoodDataADT<FoodItem> {
 	@Override
 	public void addFoodItem(FoodItem foodItem) {
 		foodItemList.add(foodItem);
+		indexes.get("Calories").insert(foodItem.getNutrientValue("Calories"), foodItem);
+		indexes.get("Fat").insert(foodItem.getNutrientValue("Fat"), foodItem);
+		indexes.get("Carb").insert(foodItem.getNutrientValue("Carb"), foodItem);
+		indexes.get("Fiber").insert(foodItem.getNutrientValue("Fiber"), foodItem);
+		indexes.get("Protein").insert(foodItem.getNutrientValue("Protein"), foodItem);
 		foodItemList.sort(Main.lexicographicOrder);
 	}
 

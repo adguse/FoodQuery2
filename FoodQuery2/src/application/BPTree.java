@@ -64,9 +64,9 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             return new ArrayList<V>();
         List<V> search = root.rangeSearch(key, comparator);
          for(V item: search) {
-         System.out.println(item);
+         //System.out.println(item);
          }
-         System.out.print(this.toString());
+         //System.out.print(this.toString());
         return search;
     }
 
