@@ -49,7 +49,7 @@ public class Main extends Application {
 	public FormType[] forms = new FormType[6];
 	public TextField[] fields = new TextField[7];
 	public Button apply = new Button("Apply");
-	private final double WR = (screenSize.getWidth() / 1980);
+	private final double WR = (screenSize.getWidth() / 1920);
 	private final double HR = (screenSize.getHeight() / 1080);
 	public static Comparator<FoodItem> lexicographicOrder = (e, e1) -> {
 		return e.getName().compareTo(e1.getName());
@@ -84,7 +84,7 @@ public class Main extends Application {
 			bar.getMenus().add(fileMenu);
 			bar.getMenus().add(helpMenu);
 			// root.setPadding(new Insets(40, 20, 10, 40));
-			HBox h = new HBox(10);
+			HBox h = new HBox(10*WR);
 			h.setAlignment(Pos.CENTER_LEFT);
 			TextField t = new TextField();
 			h.getChildren().add(new Label("Select a File:") {
@@ -126,14 +126,14 @@ public class Main extends Application {
 			title.getChildren().add(name);
 			title.setPadding(new Insets(0, 0, 0, 125*WR));
 			h.getChildren().add(title);
-			h.setPadding(new Insets(15*HR, 20, 0, 40*WR));
+			h.setPadding(new Insets(15*HR, 20*WR, 0, 40*WR));
 			VBox v = new VBox();
 			// v.setPadding(new Insets(40, 20, 10, 40));
-			v.setSpacing(40);
+			v.setSpacing(40*HR);
 			v.getChildren().add(bar);
 			v.getChildren().add(h);
 			v.getChildren().add(new Separator(Orientation.HORIZONTAL));
-			HBox main = new HBox(10);
+			HBox main = new HBox(10*WR);
 			main.setPadding(new Insets(10*HR, 0, 0, 50*WR));
 			main.setMaxHeight(400*HR);
 			main.setMaxWidth(400*WR);
@@ -261,11 +261,11 @@ public class Main extends Application {
 			meal.setPadding(new Insets(10*HR, 50*WR, 0, 0));
 			meal.setMaxHeight(600*HR);
 			meal.setMaxWidth(400*WR);
-			meal.getChildren().add(new VBox(20*HR) {
+			meal.getChildren().add(new VBox(10*HR) {
 				{
 					Label selectedFoods = new Label("Selected Foods for Meal");
 					selectedFoods.getStyleClass().add("white-labels");
-					selectedFoods.setPadding(new Insets(20*HR, 0, 0, 50*WR));
+					selectedFoods.setPadding(new Insets(20*HR, 0, 0, 20*WR));
 					this.getChildren().add(selectedFoods);
 					mealViewer = new ListView<FoodItem>();
 					mealViewer.setPrefHeight(425*HR);
@@ -273,7 +273,7 @@ public class Main extends Application {
 					mealViewer.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 					this.getChildren().add(mealViewer);
 
-					this.getChildren().add(new HBox(10*WR) {
+					this.getChildren().add(new VBox(10*HR) {
 						{
 							this.getChildren().add(new Button("Remove From Meal") {
 								{
@@ -363,7 +363,7 @@ public class Main extends Application {
 				}
 			});
 
-			middle.setPadding(new Insets(100*HR, 0, 0, 105*WR));
+			middle.setPadding(new Insets(100*HR, 0, 0, 75*WR));
 			middle.getChildren().add(middleLeft);
 			middle.getChildren().add(middleRight);
 			all.getChildren().add(middle);
@@ -390,7 +390,7 @@ public class Main extends Application {
 					"Select the filters you want by clicking the appropriate checkboxes. Input the correct comparator and number value (Ex: > 50)"));
 
 			button.getChildren().add(help);
-			button.setPadding(new Insets(10*HR, 0, 0, 225*WR));
+			button.setPadding(new Insets(10*HR, 0, 0, 175*WR));
 
 			all.getChildren().add(button);
 			root.setCenter(all);
