@@ -1,5 +1,7 @@
 package application;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -43,6 +45,7 @@ public class Main extends Application {
 	public Label numberLabel;
 	public ListView<FoodItem> mealViewer;
 	public BarChart nutriAnalysis;
+	public final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public FormType[] forms = new FormType[6];
 	public TextField[] fields = new TextField[7];
 	public Button apply = new Button("Apply");
@@ -389,8 +392,8 @@ public class Main extends Application {
 
 			all.getChildren().add(button);
 			root.setCenter(all);
-
-			Scene scene = new Scene(root, 1280, 800);
+			
+			Scene scene = new Scene(root, screenSize.getWidth()*.74, screenSize.getHeight()*.78);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setOnCloseRequest(e -> {
 				System.exit(1);
