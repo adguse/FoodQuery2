@@ -64,10 +64,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		if (!comparator.contentEquals(">=") && !comparator.contentEquals("==") && !comparator.contentEquals("<="))
 			return new ArrayList<V>();
 		List<V> search = root.rangeSearch(key, comparator);
-		for(V item: search) {
-		    System.out.println(item.toString());
-		}
-		System.out.print(this.toString());
 		return search;
 	}
 
@@ -376,9 +372,11 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 				sibling.previous = this.previous;
 				this.previous.next = sibling;
 				sibling.next = this;
-			} else {
 				this.previous = sibling;
+			} else {
+				sibling.previous = this.previous;
 				sibling.next = this;
+				this.previous = sibling;
 			}
 
 			return sibling;
@@ -429,7 +427,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 					built.addAll(next.rangeSearch(key, comparator));
 				}
 				break;
-			}
+			}//changes
 			return built;
 		}
 
@@ -464,7 +462,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 			bpTree.insert(j, j);
 			System.out.println("\n\nTree structure:\n" + bpTree.toString());
 		}
-		List<Double> gg = bpTree.rangeSearch(20d, ">=");
+		List<Double> gg = bpTree.rangeSearch(24d, "<=");
 		for (int i = 0; i < gg.size(); ++i) {
 			System.out.println(gg.get(i));
 		}
