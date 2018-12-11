@@ -368,9 +368,9 @@ public class Main extends Application {
 			middleLeft.setMaxWidth(200 * WR);
 			middleLeft.getChildren().add(new VBox(10 * HR) {
 				{
-					this.getChildren().add(forms[0] = new FormType("Name Filter"));
-					this.getChildren().add(forms[1] = new FormType("Calorie Filter"));
-					this.getChildren().add(forms[2] = new FormType("Carb Filter"));
+					this.getChildren().add(forms[0] = new FormType("Name Filter", "Apple"));
+					this.getChildren().add(forms[1] = new FormType("Calorie Filter", "<= 500"));
+					this.getChildren().add(forms[2] = new FormType("Carb Filter", "== 28"));
 				}
 			});
 			middleRight.setPadding(new Insets(10 * HR, 50 * WR, 0, 0));
@@ -378,9 +378,9 @@ public class Main extends Application {
 			middleRight.setMaxWidth(200 * WR);
 			middleRight.getChildren().add(new VBox(10 * HR) {
 				{
-					this.getChildren().add(forms[3] = new FormType("Protein Filter"));
-					this.getChildren().add(forms[4] = new FormType("Fiber Filter"));
-					this.getChildren().add(forms[5] = new FormType("Fat Filter"));
+					this.getChildren().add(forms[3] = new FormType("Protein Filter", ">= 5"));
+					this.getChildren().add(forms[4] = new FormType("Fiber Filter", "== 1"));
+					this.getChildren().add(forms[5] = new FormType("Fat Filter", "<= 10"));
 				}
 			});
 

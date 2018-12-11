@@ -13,7 +13,7 @@ public class FormType extends VBox {
 	private CheckBox checkbox;
 	private TextField textField;
 
-	public FormType(String field) {
+	public FormType(String field, String greyedText) {
 		super(10);
 		this.getChildren().add(checkbox = new CheckBox(field) {
 		{
@@ -22,6 +22,8 @@ public class FormType extends VBox {
 		});
 		this.getChildren().add(textField = new TextField() {
 		{
+			this.setPromptText(greyedText);
+			this.setFocusTraversable(false);
 			this.getStyleClass().add("filters");
 		}
 		});
