@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -121,8 +122,10 @@ public class FoodData implements FoodDataADT<FoodItem> {
     			String[] tokens = rules.get(i).split(" ");
     			String comparator = tokens[0];
     			double key = Double.parseDouble(tokens[1]);
-    			List<FoodItem> nutrientRangeList = (indexes.get((indexes.keySet().toArray())[i]).rangeSearch(key, comparator));
-    			for (int j = 0; i < nutrientRangeList.size(); j++) {
+    			Object[] s = indexes.keySet().toArray();
+    			Arrays.sort(s);
+    			List<FoodItem> nutrientRangeList = (indexes.get((s[i])).rangeSearch(key, comparator));
+    			for (int j = 0; j < nutrientRangeList.size(); j++) {
     				if (!nutrientFilters.contains(nutrientRangeList.get(j))) {
     					nutrientFilters.add(nutrientRangeList.get(j));
     				}

@@ -34,7 +34,6 @@ public class FormType extends VBox {
 	public void filter(List<FoodItem> list, List<String> filters) {
 		if (checkbox.isSelected()) {
 			List<FoodItem> filtered = Main.foodData.filterByNutrients(filters);
-			System.out.println(filtered);
 			for (int i = 0; i < list.size(); i++) {
 				if (!filtered.contains(list.get(i))) {
 					list.remove(i);
@@ -62,5 +61,9 @@ public class FormType extends VBox {
 
 	public String getText() {
 		return textField.getText().trim();
+	}
+	
+	public String toString() {
+		return checkbox.getText();
 	}
 }

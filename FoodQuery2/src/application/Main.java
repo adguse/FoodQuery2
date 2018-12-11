@@ -398,11 +398,13 @@ public class Main extends Application {
 				for (int i = 1; i < forms.length; i++) {
 					filters.add(forms[i].getText());
 				}
-
-				System.out.println(list);
-				forms[1].filter(list, filters);
-				// System.out.println(list);
-				 forms[0].filter(list);
+				forms[0].filter(list);
+				for (int i = 1; i < forms.length; i++) {
+					if(forms[i].isSelected()) {
+						forms[i].filter(list, filters);
+						break;
+					}
+				}
 				ObservableList<FoodItem> items = FXCollections.observableArrayList(list);
 				listOfFoods.setItems(items);
 				numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
