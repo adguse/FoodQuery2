@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -153,8 +154,36 @@ public class FoodData implements FoodDataADT<FoodItem> {
 
 	@Override
 	public void saveFoodItems(String filename) {
-		// TODO Auto-generated method stub
+		File newFoodFile = null; // file for saving food list to
+		PrintStream writer = null; // used to write food list to file
 		
+			try {
+				newFoodFile = new File(filename); 
+				writer = new PrintStream(newFoodFile); 
+				
+				for (int i = 0; i < foodItemList.size(); i++) {
+					writer.print(foodItemList.get(i).getID()); // write the ID to the file
+					writer.print(", ");
+					writer.print(foodItemList.get(i).getName()); // write name to file
+					writer.print((", calories, "));
+					writer.print(foodItemList.get(i).getNutrientValue("calories"));
+					writer.print((", fat, "));
+					writer.print(foodItemList.get(i).getNutrientValue("fat"));
+					writer.print((", carbohydrate, "));
+					writer.print(foodItemList.get(i).getNutrientValue("carbohydrate"));
+					writer.print((", fiber, "));
+					writer.print(foodItemList.get(i).getNutrientValue("fiber"));
+					writer.print((", protein, "));
+					writer.println(foodItemList.get(i).getNutrientValue("protein"));
+				} 
+			}
+			
+		catch (java.io.FileNotFoundException f) {  
+			System.out.println("WARNING: Could not save food items to file" + filename);
+		} finally {
+			if (writer != null) // if statement checks for null pointer
+				writer.close();  // close the file
+		} 
 	}
 
 }
