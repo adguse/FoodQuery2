@@ -57,8 +57,16 @@ public class Main extends Application {
 	private final double WR = (screenSize.getWidth() / 1920);
 	private final double HR = (screenSize.getHeight() / 1080);
 	public TextField fileName = new TextField();
-	public static Comparator<FoodItem> lexicographicOrder = (e, e1) -> {
+	public static final Comparator<FoodItem> lexicographicOrder = (e, e1) -> {
 		return e.getName().compareTo(e1.getName());
+	};
+	private static final EventHandler<ActionEvent> HelpDialog = e -> {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Information Dialog");
+		alert.setHeaderText("Look, an Information Dialog");
+		alert.setContentText("I have a great message for you!");
+
+		alert.showAndWait();
 	};
 	public Stage popupStage = new Stage();
 
@@ -107,19 +115,7 @@ public class Main extends Application {
 //									+ "to a meal and view the nutritional facts of that meal. Our mission is to inspire conscious eating which can lead to a \n "
 //									+ "healthier and happier life. Let’s get started!");
 //					Tooltip.install(this.getContent(), about);
-					this.setOnAction(new EventHandler<ActionEvent>() {
-						@Override
-						public void handle(ActionEvent event) {
-							Alert alert = new Alert(AlertType.INFORMATION);
-							alert.setTitle("Information Dialog");
-							alert.setHeaderText("Look, an Information Dialog");
-							alert.setContentText("I have a great message for you!");
-
-							alert.showAndWait();
-
-						}
-					});
-
+					this.setOnAction(HelpDialog);
 				}
 			});
 			bar.getMenus().add(fileMenu);
@@ -396,7 +392,8 @@ public class Main extends Application {
 				List<FoodItem> list = new ArrayList<>(foodData.getAllFoodItems());
 				List<String> filters = new ArrayList<>();
 				for (int i = 1; i < forms.length; i++) {
-					filters.add(forms[i].getText());
+					if(forms[i].isSelected())filters.add(forms[i].getText());
+					else filters.add("");
 				}
 				forms[0].filter(list);
 				for (int i = 1; i < forms.length; i++) {
@@ -411,9 +408,9 @@ public class Main extends Application {
 			});
 			button.getChildren().addAll(na);
 			Button help = new Button("Help");
-			help.setTooltip(new Tooltip(
-					"Select the filters you want by clicking the appropriate checkboxes. Input the correct comparator and number value (Ex: > 50)"));
-
+//			help.setTooltip(new Tooltip(
+//					"Select the filters you want by clicking the appropriate checkboxes. Input the correct comparator and number value (Ex: > 50)"));
+			help.setOnAction(HelpDialog);
 			button.getChildren().add(help);
 			button.setPadding(new Insets(10 * HR, 0, 0, 175 * WR));
 
