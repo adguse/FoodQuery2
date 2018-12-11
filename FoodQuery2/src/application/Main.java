@@ -17,7 +17,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -41,10 +40,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 public class Main extends Application {
 	public File file = null;
+	public File saveFile = null;
 	public static FoodData foodData = null;
 	public MealBuilder mealList = new MealBuilder();
 	public ListView<FoodItem> listOfFoods;
@@ -57,6 +56,7 @@ public class Main extends Application {
 	public Button apply = new Button("Apply");
 	private final double WR = (screenSize.getWidth() / 1920);
 	private final double HR = (screenSize.getHeight() / 1080);
+	public TextField fileName = new TextField();
 	public static Comparator<FoodItem> lexicographicOrder = (e, e1) -> {
 		return e.getName().compareTo(e1.getName());
 	};
@@ -69,6 +69,28 @@ public class Main extends Application {
 			BorderPane root = new BorderPane();
 			MenuBar bar = new MenuBar();
 			Menu fileMenu = new Menu("File");
+			fileMenu.getItems().add(new MenuItem("Load") {
+				{
+					this.setOnAction(e -> loadFile());
+				}
+			});
+			fileMenu.getItems().add(new MenuItem("Save") {
+				{
+					this.setOnAction(e -> {
+						FileChooser fileChooser = new FileChooser();
+						fileChooser.setTitle("Save Resource File");
+						if (saveFile != null) {
+							fileChooser.setInitialDirectory(saveFile.getParentFile());
+						}
+						File choosenFile = fileChooser.showSaveDialog(null);
+						if (choosenFile != null) {
+							foodData.saveFoodItems(choosenFile.getAbsolutePath().contains(".") ? choosenFile.getAbsolutePath() : choosenFile.getAbsolutePath()+".csv");
+							saveFile = choosenFile;
+						}
+
+					});
+				}
+			});
 			fileMenu.getItems().add(new MenuItem("Close") {
 				{
 					this.setOnAction(e -> {
@@ -80,6 +102,11 @@ public class Main extends Application {
 			Menu helpMenu = new Menu("Help");
 			helpMenu.getItems().add(new CustomMenuItem(new Label("About")) {
 				{
+//					Tooltip about = new Tooltip(
+//							"Welcome to Choose to Lose — a program that allows you to add various food items \n "
+//									+ "to a meal and view the nutritional facts of that meal. Our mission is to inspire conscious eating which can lead to a \n "
+//									+ "healthier and happier life. Let’s get started!");
+//					Tooltip.install(this.getContent(), about);
 					this.setOnAction(new EventHandler<ActionEvent>() {
 						@Override
 						public void handle(ActionEvent event) {
@@ -92,41 +119,23 @@ public class Main extends Application {
 
 						}
 					});
-				}
 
+				}
 			});
 			bar.getMenus().add(fileMenu);
 			bar.getMenus().add(helpMenu);
 			// root.setPadding(new Insets(40, 20, 10, 40));
 			HBox h = new HBox(10 * WR);
 			h.setAlignment(Pos.CENTER_LEFT);
-			TextField t = new TextField();
 			h.getChildren().add(new Label("Select a File:") {
 				{
 					this.getStyleClass().add("filters");
 				}
 			});
-			h.getChildren().add(t);
+			h.getChildren().add(fileName);
 			h.getChildren().add(new Button("Browse") {
 				{
-					this.setOnAction(e -> {
-						FileChooser fileChooser = new FileChooser();
-						fileChooser.setTitle("Open Resource File");
-						if (file != null) {
-							fileChooser.setInitialDirectory(file.getParentFile());
-						}
-						File choosenFile = fileChooser.showOpenDialog(null);
-						if (choosenFile != null) {
-							file = choosenFile;
-							t.setText(file.getName());
-							foodData = new FoodData();
-							foodData.loadFoodItems(file.getAbsolutePath());
-							ObservableList<FoodItem> items = FXCollections
-									.observableArrayList(foodData.getAllFoodItems());
-							listOfFoods.setItems(items);
-							numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
-						}
-					});
+					this.setOnAction(e -> loadFile());
 				}
 			});
 			HBox title = new HBox(10 * WR);
@@ -424,6 +433,24 @@ public class Main extends Application {
 
 		Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void loadFile() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Resource File");
+		if (file != null) {
+			fileChooser.setInitialDirectory(file.getParentFile());
+		}
+		File choosenFile = fileChooser.showOpenDialog(null);
+		if (choosenFile != null) {
+			file = choosenFile;
+			fileName.setText(file.getName());
+			foodData = new FoodData();
+			foodData.loadFoodItems(file.getAbsolutePath());
+			ObservableList<FoodItem> items = FXCollections.observableArrayList(foodData.getAllFoodItems());
+			listOfFoods.setItems(items);
+			numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
 		}
 	}
 
