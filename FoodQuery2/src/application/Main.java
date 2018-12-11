@@ -402,7 +402,7 @@ public class Main extends Application {
 				System.out.println(list);
 				forms[1].filter(list, filters);
 				// System.out.println(list);
-				// forms[0].filter(list);
+				 forms[0].filter(list);
 				ObservableList<FoodItem> items = FXCollections.observableArrayList(list);
 				listOfFoods.setItems(items);
 				numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
