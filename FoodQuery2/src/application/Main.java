@@ -378,9 +378,9 @@ public class Main extends Application {
 			middleRight.setMaxWidth(200 * WR);
 			middleRight.getChildren().add(new VBox(10 * HR) {
 				{
-					this.getChildren().add(forms[3] = new FormType("Protein Filter", ">= 5"));
+					this.getChildren().add(forms[5] = new FormType("Protein Filter", ">= 5"));
 					this.getChildren().add(forms[4] = new FormType("Fiber Filter", "== 1"));
-					this.getChildren().add(forms[5] = new FormType("Fat Filter", "<= 10"));
+					this.getChildren().add(forms[3] = new FormType("Fat Filter", "<= 10"));
 				}
 			});
 
