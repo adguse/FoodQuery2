@@ -411,8 +411,12 @@ public class Main extends Application {
 				numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
 			});
 			button.getChildren().addAll(na);
-			Button help = new Button("Help");
-			help.setOnAction(HelpDialog);
+			Button help = new Button("Clear");
+			help.setOnAction(e->{
+				for(FormType f : forms) {
+					f.clear();
+				}
+			});
 			button.getChildren().add(help);
 			button.setPadding(new Insets(10 * HR, 0, 0, 175 * WR));
 

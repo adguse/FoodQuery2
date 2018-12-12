@@ -56,6 +56,11 @@ public class FormType extends VBox {
 			}
 		}
 	}
+	
+	public void clear() {
+		textField.clear();
+		checkbox.setSelected(false);
+	}
 
 	public boolean isSelected() {
 		return checkbox.isSelected();
