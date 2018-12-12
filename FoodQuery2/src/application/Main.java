@@ -192,33 +192,33 @@ public class Main extends Application {
 					smallTitle.getStyleClass().add("white-labels");
 					this.getChildren().add(smallTitle);
 					listOfFoods = new ListView<FoodItem>();
-					listOfFoods.setCellFactory(new Callback<ListView<FoodItem>, ListCell<FoodItem>>() { //Set a cellfactory callback
-						/**
-							This callback will display a tooltip popup on every element in the listOfFoods that displays nutritional
-							information for that element
-						*/
-			          public ListCell<FoodItem> call(ListView<FoodItem> param) {
-			            final Label leadLbl = new Label();
-			            final Tooltip tooltip = new Tooltip();
-			            final ListCell<FoodItem> cell = new ListCell<FoodItem>() {
-			              @Override
-			              public void updateItem(FoodItem foodItem, boolean empty) {
-			                super.updateItem(foodItem, empty);
-			                if (foodItem != null) {
-			                  leadLbl.setText(foodItem.getName());
-			                  setText(foodItem.getName());
-			                  tooltip.setText("Calories: " + foodItem.getNutrientValue("calories") + "\n"
-			                		  + "Carbs: " + foodItem.getNutrientValue("carbohydrate") + "\n"
-			                		  + "Fat: " + foodItem.getNutrientValue("fat") + "\n"
-			                		  + "Fiber: " + foodItem.getNutrientValue("fiber") + "\n"
-			                		  + "Protein: " + foodItem.getNutrientValue("protein") + "\n");
-			                  setTooltip(tooltip);
-			                }
-			              }
-			            }; // ListCell
-			            return cell;
-			          }
-			        }); // setCellFactory
+//					listOfFoods.setCellFactory(new Callback<ListView<FoodItem>, ListCell<FoodItem>>() { //Set a cellfactory callback
+//						/**
+//							This callback will display a tooltip popup on every element in the listOfFoods that displays nutritional
+//							information for that element
+//						*/
+//			          public ListCell<FoodItem> call(ListView<FoodItem> param) {
+//			            final Label leadLbl = new Label();
+//			            final Tooltip tooltip = new Tooltip();
+//			            final ListCell<FoodItem> cell = new ListCell<FoodItem>() {
+//			              @Override
+//			              public void updateItem(FoodItem foodItem, boolean empty) {
+//			                super.updateItem(foodItem, empty);
+//			                if (foodItem != null) {
+//			                  leadLbl.setText(foodItem.getName());
+//			                  setText(foodItem.getName());
+//			                  tooltip.setText("Calories: " + foodItem.getNutrientValue("calories") + "\n"
+//			                		  + "Carbs: " + foodItem.getNutrientValue("carbohydrate") + "\n"
+//			                		  + "Fat: " + foodItem.getNutrientValue("fat") + "\n"
+//			                		  + "Fiber: " + foodItem.getNutrientValue("fiber") + "\n"
+//			                		  + "Protein: " + foodItem.getNutrientValue("protein") + "\n");
+//			                  setTooltip(tooltip);
+//			                }
+//			              }
+//			            }; // ListCell
+//			            return cell;
+//			          }
+//			        }); // setCellFactory
 					listOfFoods.setMinHeight(400 * HR);
 					listOfFoods.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 					this.getChildren()
