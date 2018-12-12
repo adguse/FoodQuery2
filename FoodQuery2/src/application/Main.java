@@ -187,6 +187,7 @@ public class Main extends Application {
 							popupStage = new Stage();
 							this.setOnAction(e -> {
 								apply.setOnAction(ee -> {
+									try {
 									FoodItem f = new FoodItem(fields[1].getText(), fields[0].getText().toLowerCase());
 									f.addNutrient("calories", Double.parseDouble(fields[2].getText()));
 									f.addNutrient("carbohydrate", Double.parseDouble(fields[3].getText()));
@@ -198,6 +199,14 @@ public class Main extends Application {
 									foodData.addFoodItem(f);
 									numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
 									popupStage.close();
+									}catch(NumberFormatException ne) {
+										Alert alert = new Alert(AlertType.ERROR);
+										alert.setTitle("Error Dialog");
+										alert.setHeaderText("Opps, looks like your search criteria isn't in the correct format");
+										alert.setContentText("All nutrient values must exist and be numeric");
+
+										alert.showAndWait();
+									}
 								});
 								AnchorPane popupPane = new AnchorPane();
 								popupPane.setMaxHeight(400 * HR);
