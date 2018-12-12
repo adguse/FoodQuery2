@@ -160,8 +160,9 @@ public class FoodData implements FoodDataADT<FoodItem> {
 					+ "<value>: a positive double value\n" + "Format of a rule: <comparator> <value>\n"
 					+ "Multiple rules can contain the same nutrient.\n"
 					+ "Example of a rule for filtering between 50 and 200:\n" + "\">= 50.0,<= 200.0\"\n");
-
+			
 			alert.showAndWait();
+			return null;
 		}
 		return nutrientFilters; //returns the new list of filtered items
 	}
