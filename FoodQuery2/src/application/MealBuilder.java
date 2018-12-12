@@ -27,10 +27,15 @@ public class MealBuilder {
         this.totalProtein = 0;
     }
     
+    //returns the list of foods in the meal
     public List<FoodItem> getMeal(){
         return this.mealList;
     }
     
+    /**
+     * Adds a food to the meal list.
+     * @param foodStuff, the foodItem to add
+     */
     public void addToMeal(FoodItem foodStuff) {
         if(mealList.contains(foodStuff)) { //checks if the food item is already in the meal list
             return;
@@ -39,6 +44,10 @@ public class MealBuilder {
         this.mealList.add(foodStuff);
     }
     
+    /**
+     * Removes a food from the meal list.
+     * @param foodStuff, the foodItem to remove.
+     */
     public void removeFromMeal(FoodItem foodStuff) {
         if(!mealList.contains(foodStuff)) {
             return;
@@ -56,6 +65,10 @@ public class MealBuilder {
         this.totalProtein = 0;
     }
     
+    /**
+     * This method takes all of the items in the meal list and adds their corresponding
+     * nutritional values together. This information will be used to create a graph. 
+     */
     public void nutriAnalysis() {
         clearNutri(); //clears the meal information
         for(FoodItem f: this.mealList) { //iterates through all items in the meal list
@@ -67,6 +80,8 @@ public class MealBuilder {
             this.totalProtein += f.getNutrientValue("protein");
         }
     }
+    
+    //various getters to get all of the calories 
     
     public double getTotalCals() {
         return totalCals;
@@ -81,8 +96,6 @@ public class MealBuilder {
     public double getTotalCarbs() {
         return totalCarbs;
     }
-
-
 
     public double getTotalFiber() {
         return totalFiber;
