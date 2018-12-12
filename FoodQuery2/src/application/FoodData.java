@@ -132,6 +132,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
 					for (int k = 0; k < arr.length; k++) {
 						String[] tokens = arr[k].trim().split(" "); // separate individual rule into comparator and double value 
 						String comparator = tokens[0];
+						if(!comparator.equals("==") && !comparator.equals(">=") && !comparator.equals("<=")) throw new IllegalArgumentException();
 						double key = Double.parseDouble(tokens[1]);
 						if (key < 0) { // throw exception with negative nutrient value
 							throw new IllegalArgumentException();
