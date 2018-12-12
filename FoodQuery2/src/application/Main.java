@@ -248,17 +248,22 @@ public class Main extends Application {
 									FoodItem f = new FoodItem(fields[1].getText(), fields[0].getText().toLowerCase()); //instantiates a new foodItem to add to the list
 									//based on information that the user inputs
 									//each nutrient user input is added to the corresponding nutritional value
-									f.addNutrient("calories", Double.parseDouble(fields[2].getText())); 
-									f.addNutrient("carbohydrate", Double.parseDouble(fields[3].getText()));
-									f.addNutrient("protein", Double.parseDouble(fields[4].getText()));
-									f.addNutrient("fiber", Double.parseDouble(fields[5].getText()));
-									f.addNutrient("fat", Double.parseDouble(fields[6].getText()));
-									listOfFoods.getItems().add(f);
-									listOfFoods.getItems().sort(lexicographicOrder);
-									foodData.addFoodItem(f);
-									numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
-									popupStage.close();
-									
+									if(Double.parseDouble(fields[2].getText()) >= 0 && 
+											Double.parseDouble(fields[3].getText()) >= 0 && 
+											Double.parseDouble(fields[4].getText()) >= 0 && 
+											Double.parseDouble(fields[5].getText()) >= 0 &&
+											Double.parseDouble(fields[6].getText()) >= 0) {
+										f.addNutrient("calories", Double.parseDouble(fields[2].getText())); 
+										f.addNutrient("carbohydrate", Double.parseDouble(fields[3].getText()));
+										f.addNutrient("protein", Double.parseDouble(fields[4].getText()));
+										f.addNutrient("fiber", Double.parseDouble(fields[5].getText()));
+										f.addNutrient("fat", Double.parseDouble(fields[6].getText()));
+										listOfFoods.getItems().add(f);
+										listOfFoods.getItems().sort(lexicographicOrder);
+										foodData.addFoodItem(f);
+										numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
+										popupStage.close();
+									}else throw new NumberFormatException();
 									// catch error if user enters input incorrectly 
 									}catch(NumberFormatException ne) {
 										Alert alert = new Alert(AlertType.ERROR);
@@ -370,16 +375,31 @@ public class Main extends Application {
 
 					this.getChildren().add(new VBox(10 * HR) {
 						{
-							this.getChildren().add(new Button("Remove From Meal") {
+							this.getChildren().add(new HBox(10*WR) {
 								{
-									this.setOnAction(e -> {
-
-										for (FoodItem f : mealViewer.getSelectionModel().getSelectedItems()) {
-											mealList.removeFromMeal(f);
+									this.getChildren().add(new Button("Remove From Meal") {
+										{
+											this.setOnAction(e -> {
+		
+												for (FoodItem f : mealViewer.getSelectionModel().getSelectedItems()) {
+													mealList.removeFromMeal(f);
+												}
+												mealViewer.setItems(FXCollections.observableArrayList(mealList.getMeal())); //Remove from meal and make sure no duplicates
+											});
 										}
-										mealViewer.setItems(FXCollections.observableArrayList(mealList.getMeal())); //Remove from meal and make sure no duplicates
-									});
-								}
+									});	
+									this.getChildren().add(new Button("Clear") {
+										{
+											this.setOnAction(e -> {
+												mealViewer.getSelectionModel().selectAll();
+												for (FoodItem f : mealViewer.getSelectionModel().getSelectedItems()) {
+													mealList.removeFromMeal(f);
+												}
+												mealViewer.setItems(FXCollections.observableArrayList(mealList.getMeal())); //Remove from meal and make sure no duplicates
+											});
+										}
+									});	
+								};
 							});
 							
 							// graph containing nutritional facts 
