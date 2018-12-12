@@ -425,6 +425,9 @@ public class Main extends Application {
 				for(FormType f : forms) {
 					f.clear();
 				}
+				ObservableList<FoodItem> items = FXCollections.observableArrayList(foodData.getAllFoodItems());
+				listOfFoods.setItems(items);
+				numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
 			});
 			button.getChildren().add(help);
 			button.setPadding(new Insets(10 * HR, 0, 0, 175 * WR));

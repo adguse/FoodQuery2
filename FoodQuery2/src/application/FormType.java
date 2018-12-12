@@ -59,6 +59,7 @@ public class FormType extends VBox {
 	
 	public void clear() {
 		textField.clear();
+		textField.setDisable(true);
 		checkbox.setSelected(false);
 	}
 
