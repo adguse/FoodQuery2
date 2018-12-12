@@ -75,7 +75,7 @@ public class Main extends Application {
 		alert.setContentText(
 				"Welcome to Choose to Lose! Choose to lose is program that allows you to view the nutritional facts of a meal "
 						+ "created by you. To begin, upload a file from your computer to create a list of foods or individually add food items using "
-						+ "the add to food list button. To search for certain foods in your list, use the name and nutritional filters to the right of the food list. "
+						+ "the Add to Food List button. To search for certain foods in your list, use the name and nutritional filters to the right of the food list. "
 						+ "Once you find a food you like, add it to your meal list. Finally, to view the "
 						+ "nutritional facts of a food item or your meal, use the Analyze Nutritional Analysis button below the meal list. Let's get started!");
 
@@ -89,7 +89,7 @@ public class Main extends Application {
 	 * the ratios are based off of those numbers.  The main border pane contains all the sub elements, including a custom element,
 	 * FormType, which extends VBox and ties together the checkboxes and textfields in the filtering aspect of the GUI.
 	 * The GUI utilizes anonymous classes and initialization blocks to save extra variable declarations and lines of code.
-	 * The GUI is built to be userfriendly and intuitive.
+	 * The GUI is built to be user-friendly and intuitive.
 	 * 
 	 */
 	@Override
