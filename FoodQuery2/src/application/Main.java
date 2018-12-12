@@ -43,10 +43,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ * This class represents the backend for managing all the operations associated
+ * with FoodItems
+ * 
+ * @author Alex E, Theo K, Ellie B, Will M, Alex G
+ */
 public class Main extends Application {
 	public File file = null;
 	public File saveFile = null;
-	public static FoodData foodData = null;
+	public static FoodData foodData = null; 
 	public MealBuilder mealList = new MealBuilder();
 	public ListView<FoodItem> listOfFoods;
 	public Label numberLabel;
@@ -62,6 +68,11 @@ public class Main extends Application {
 	public static final Comparator<FoodItem> lexicographicOrder = (e, e1) -> {
 		return e.getName().compareTo(e1.getName());
 	};
+	
+	/**
+	 * This static method creates an alert popup box with the appropriate message. 
+	 * 
+	 */
 	private static final EventHandler<ActionEvent> HelpDialog = e -> {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("About");
@@ -83,6 +94,8 @@ public class Main extends Application {
 			
 
 			BorderPane root = new BorderPane();
+			
+			// menubar at the top of the screen including a file button (includes save, load and close) and a help button (includes about)
 			MenuBar bar = new MenuBar();
 			Menu fileMenu = new Menu("File");
 			fileMenu.getItems().add(new MenuItem("Load") {
@@ -90,6 +103,8 @@ public class Main extends Application {
 					this.setOnAction(e -> loadFile());
 				}
 			});
+			
+			// save current food list 
 			fileMenu.getItems().add(new MenuItem("Save") {
 				{
 					this.setOnAction(e -> {
@@ -125,7 +140,8 @@ public class Main extends Application {
 			});
 			bar.getMenus().add(fileMenu);
 			bar.getMenus().add(helpMenu);
-			// root.setPadding(new Insets(40, 20, 10, 40));
+			
+			// top of page including the select a file feature and the title  
 			HBox h = new HBox(10 * WR);
 			h.setAlignment(Pos.CENTER_LEFT);
 			h.getChildren().add(new Label("Select a File:") {
@@ -152,16 +168,19 @@ public class Main extends Application {
 			h.getChildren().add(title);
 			h.setPadding(new Insets(15 * HR, 20 * WR, 0, 40 * WR));
 			VBox v = new VBox();
-			// v.setPadding(new Insets(40, 20, 10, 40));
 			v.setSpacing(40 * HR);
 			v.getChildren().add(bar);
 			v.getChildren().add(h);
 			v.getChildren().add(new Separator(Orientation.HORIZONTAL));
+			
+			// primary functioning area of the program 
 			HBox main = new HBox(10 * WR);
 			main.setPadding(new Insets(10 * HR, 0, 0, 50 * WR));
 			main.setMaxHeight(400 * HR);
 			main.setMaxWidth(400 * WR);
-			main.getChildren().add(new VBox(10 * HR) {
+			
+			// left side of main area including list of foods list and associated buttons 
+			main.getChildren().add(new VBox(10 * HR) { 
 				{
 					Label smallTitle = new Label("List Of Foods");
 					smallTitle.setPadding(new Insets(0, 0, 0, 50 * WR));
@@ -209,8 +228,11 @@ public class Main extends Application {
 							});
 						}
 					});
+					
+				    // 
 					this.getChildren().add(new Button("Add To Food List") {
 						{
+							// popup allowing the user to add a individual food item with name, id and nutritional facts
 							popupStage = new Stage();
 							this.setOnAction(e -> {
 								apply.setOnAction(ee -> {
@@ -226,6 +248,8 @@ public class Main extends Application {
 									foodData.addFoodItem(f);
 									numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
 									popupStage.close();
+									
+									// catch error if user enters input incorrectly 
 									}catch(NumberFormatException ne) {
 										Alert alert = new Alert(AlertType.ERROR);
 										alert.setTitle("Error Dialog");
@@ -235,6 +259,7 @@ public class Main extends Application {
 										alert.showAndWait();
 									}
 								});
+								
 								AnchorPane popupPane = new AnchorPane();
 								popupPane.setMaxHeight(400 * HR);
 								popupPane.setMaxWidth(400 * WR);
@@ -318,6 +343,8 @@ public class Main extends Application {
 			meal.setPadding(new Insets(10 * HR, 50 * WR, 0, 0));
 			meal.setMaxHeight(600 * HR);
 			meal.setMaxWidth(400 * WR);
+			
+			// right side of main area containing list of foods in meal and nutritional analysis 
 			meal.getChildren().add(new VBox(10 * HR) {
 				{
 					Label selectedFoods = new Label("Selected Foods for Meal");
@@ -343,6 +370,8 @@ public class Main extends Application {
 									});
 								}
 							});
+							
+							// graph containing nutritional facts 
 							this.getChildren().add(new Button("Analyze Nutritional Analysis") {
 								{
 									this.setOnAction(e -> {
@@ -396,6 +425,8 @@ public class Main extends Application {
 			});
 			root.setRight(meal);
 			VBox all = new VBox(10 * HR);
+			
+			// middle area of main including filters 
 			HBox middle = new HBox(10 * WR);
 			VBox middleLeft = new VBox(10 * HR);
 			VBox middleRight = new VBox(10 * HR);
@@ -462,8 +493,6 @@ public class Main extends Application {
 			all.getChildren().add(button);
 			root.setCenter(all);
 
-			// Scene scene = new Scene(root, screenSize.getWidth()*.74,
-			// screenSize.getHeight()*.78);
 			Scene scene = new Scene(root, 1280 * WR, 810 * HR);
 
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
