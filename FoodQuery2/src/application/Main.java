@@ -50,30 +50,25 @@ import javafx.scene.layout.VBox;
  * @author Alex E, Theo K, Ellie B, Will M, Alex G
  */
 public class Main extends Application {
-	public File file = null;
-	public File saveFile = null;
-	public static FoodData foodData = null; 
-	public MealBuilder mealList = new MealBuilder();
-	public ListView<FoodItem> listOfFoods;
-	public Label numberLabel;
-	public ListView<FoodItem> mealViewer;
-	public BarChart nutriAnalysis;
-	public final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	public FormType[] forms = new FormType[6];
-	public TextField[] fields = new TextField[7];
-	public Button apply = new Button("Apply");
-	private final double WR = (screenSize.getWidth() / 1920);
-	private final double HR = (screenSize.getHeight() / 1080);
-	public TextField fileName = new TextField();
-	public static final Comparator<FoodItem> lexicographicOrder = (e, e1) -> {
+	public File file = null; //will store the file that is imported into the program
+	public File saveFile = null; //will store the file that will save food items into the program
+	public static FoodData foodData = null; //FoodData stores the list of food as it is filtered
+	public MealBuilder mealList = new MealBuilder(); //mealList will store instances of created meals
+	public ListView<FoodItem> listOfFoods; //will display the list of foods
+	public Label numberLabel; //number of food elements
+	public ListView<FoodItem> mealViewer; //will display the meal list
+	public BarChart nutriAnalysis; //will display the nutritional analysis as a bar graph
+	public final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //Stores screen size
+	public FormType[] forms = new FormType[6]; //Array holding all the filter fields
+	public TextField[] fields = new TextField[7]; //Array holding all the fields to add a fooddata object to list
+	public Button apply = new Button("Apply"); // apply button, defined globally for use in lambda expressions
+	private final double WR = (screenSize.getWidth() / 1920); //Width ratio to make program look the same on every screen
+	private final double HR = (screenSize.getHeight() / 1080); //Height ratio to make program look the same on every screen
+	public TextField fileName = new TextField(); //filename textfield
+	public static final Comparator<FoodItem> lexicographicOrder = (e, e1) -> { //Static comparator method to sort lexicographically
 		return e.getName().compareTo(e1.getName());
 	};
-	
-	/**
-	 * This static method creates an alert popup box with the appropriate message. 
-	 * 
-	 */
-	private static final EventHandler<ActionEvent> HelpDialog = e -> {
+	private static final EventHandler<ActionEvent> HelpDialog = e -> { // Static EventHandler that makes a new help dialog with information
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("About");
 		alert.setHeaderText("What is Choose to Lose?");
@@ -86,8 +81,17 @@ public class Main extends Application {
 
 		alert.showAndWait();
 	};
-	public Stage popupStage = new Stage();
+	public Stage popupStage = new Stage(); //instantiates a stage
 
+	/**
+	 * This start method sets up the entire GUI.  The WR and HR variables contain ratios that are multiplied by all
+	 * pixel numbers to make the GUI look the same on all screens.  The original testing screen was 1920 by 1080 and so
+	 * the ratios are based off of those numbers.  The main border pane contains all the sub elements, including a custom element,
+	 * FormType, which extends VBox and ties together the checkboxes and textfields in the filtering aspect of the GUI.
+	 * The GUI utilizes anonymous classes and initialization blocks to save extra variable declarations and lines of code.
+	 * The GUI is built to be userfriendly and intuitive.
+	 * 
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -100,7 +104,7 @@ public class Main extends Application {
 			Menu fileMenu = new Menu("File");
 			fileMenu.getItems().add(new MenuItem("Load") {
 				{
-					this.setOnAction(e -> loadFile());
+					this.setOnAction(e -> loadFile()); //On click load file
 				}
 			});
 			
@@ -108,7 +112,7 @@ public class Main extends Application {
 			fileMenu.getItems().add(new MenuItem("Save") {
 				{
 					this.setOnAction(e -> {
-						FileChooser fileChooser = new FileChooser();
+						FileChooser fileChooser = new FileChooser(); //Create new fileChooser object
 						fileChooser.setTitle("Save Resource File");
 						if (saveFile != null) {
 							fileChooser.setInitialDirectory(saveFile.getParentFile());
@@ -117,8 +121,8 @@ public class Main extends Application {
 						if (choosenFile != null) {
 							foodData.saveFoodItems(
 									choosenFile.getAbsolutePath().contains(".") ? choosenFile.getAbsolutePath()
-											: choosenFile.getAbsolutePath() + ".csv");
-							saveFile = choosenFile;
+											: choosenFile.getAbsolutePath() + ".csv"); //If the choosen file doesn't define an extension, add csv extension
+							saveFile = choosenFile; //Set the saveFile
 						}
 
 					});
@@ -127,7 +131,7 @@ public class Main extends Application {
 			fileMenu.getItems().add(new MenuItem("Close") {
 				{
 					this.setOnAction(e -> {
-						Platform.exit();
+						Platform.exit(); //On close exit platform
 					});
 				}
 			});
@@ -135,39 +139,40 @@ public class Main extends Application {
 			Menu helpMenu = new Menu("Help");
 			helpMenu.getItems().add(new CustomMenuItem(new Label("About")) {
 				{
-					this.setOnAction(HelpDialog);
+					this.setOnAction(HelpDialog); //On click display helpdialog
 				}
 			});
 			bar.getMenus().add(fileMenu);
 			bar.getMenus().add(helpMenu);
 			
 			// top of page including the select a file feature and the title  
-			HBox h = new HBox(10 * WR);
+			HBox h = new HBox(10 * WR); //Multiply 10 by WR to scale on other screens
 			h.setAlignment(Pos.CENTER_LEFT);
 			h.getChildren().add(new Label("Select a File:") {
-				{
-					this.getStyleClass().add("filters");
+				{ 
+					this.getStyleClass().add("filters"); // Add css style class to anonymous class
 				}
 			});
 			h.getChildren().add(fileName);
 			h.getChildren().add(new Button("Browse") {
 				{
-					this.setOnAction(e -> loadFile());
+					this.setOnAction(e -> loadFile()); //oncliclk load filexs
 				}
 			});
+			//code that creates the title of the program
 			HBox title = new HBox(10 * WR);
 			VBox name = new VBox(10 * HR);
-			Label titleOfApp = new Label("Choose to Lose");
+			Label titleOfApp = new Label("Choose to Lose"); //title of app
 			titleOfApp.getStyleClass().add("title");
 			name.getChildren().add(titleOfApp);
 			Label slogan = new Label("   The first step towards a happier and healthier life...");
-			slogan.getStyleClass().add("slogan");
+			slogan.getStyleClass().add("slogan");// add css class to slogan
 			name.getChildren().add(slogan);
 			title.getChildren().add(name);
 			title.setPadding(new Insets(0, 0, 0, 125 * WR));
 			h.getChildren().add(title);
 			h.setPadding(new Insets(15 * HR, 20 * WR, 0, 40 * WR));
-			VBox v = new VBox();
+			VBox v = new VBox(); //stores all of the components that wil;l be part of the title
 			v.setSpacing(40 * HR);
 			v.getChildren().add(bar);
 			v.getChildren().add(h);
@@ -187,8 +192,11 @@ public class Main extends Application {
 					smallTitle.getStyleClass().add("white-labels");
 					this.getChildren().add(smallTitle);
 					listOfFoods = new ListView<FoodItem>();
-					listOfFoods.setCellFactory(new Callback<ListView<FoodItem>, ListCell<FoodItem>>() {
-
+					listOfFoods.setCellFactory(new Callback<ListView<FoodItem>, ListCell<FoodItem>>() { //Set a cellfactory callback
+						/**
+							This callback will display a tooltip popup on every element in the listOfFoods that displays nutritional
+							information for that element
+						*/
 			          public ListCell<FoodItem> call(ListView<FoodItem> param) {
 			            final Label leadLbl = new Label();
 			            final Tooltip tooltip = new Tooltip();
@@ -224,7 +232,7 @@ public class Main extends Application {
 								for (FoodItem f : listOfFoods.getSelectionModel().getSelectedItems()) {
 									mealList.addToMeal(f);
 								}
-								mealViewer.setItems(FXCollections.observableArrayList(mealList.getMeal()));
+								mealViewer.setItems(FXCollections.observableArrayList(mealList.getMeal())); //Get a meal, make sure there are no duplicates
 							});
 						}
 					});
@@ -234,11 +242,13 @@ public class Main extends Application {
 						{
 							// popup allowing the user to add a individual food item with name, id and nutritional facts
 							popupStage = new Stage();
-							this.setOnAction(e -> {
+							this.setOnAction(e -> { //when "Add To Food List" is clicked, the code below will be executed
 								apply.setOnAction(ee -> {
 									try {
-									FoodItem f = new FoodItem(fields[1].getText(), fields[0].getText().toLowerCase());
-									f.addNutrient("calories", Double.parseDouble(fields[2].getText()));
+									FoodItem f = new FoodItem(fields[1].getText(), fields[0].getText().toLowerCase()); //instantiates a new foodItem to add to the list
+									//based on information that the user inputs
+									//each nutrient user input is added to the corresponding nutritional value
+									f.addNutrient("calories", Double.parseDouble(fields[2].getText())); 
 									f.addNutrient("carbohydrate", Double.parseDouble(fields[3].getText()));
 									f.addNutrient("protein", Double.parseDouble(fields[4].getText()));
 									f.addNutrient("fiber", Double.parseDouble(fields[5].getText()));
@@ -265,6 +275,7 @@ public class Main extends Application {
 								popupPane.setMaxWidth(400 * WR);
 								popupPane.getChildren().add(new VBox(10 * HR) {
 									{
+										//All GUI code for adding food popup
 										this.getChildren().add(new HBox(10 * WR) {
 											{
 												this.setPadding(new Insets(25 * HR, 25 * WR, 25 * HR, 25 * WR));
@@ -337,7 +348,7 @@ public class Main extends Application {
 					});
 				}
 			});
-			root.setLeft(main);
+			root.setLeft(main); //Set left
 			root.setTop(v);
 			HBox meal = new HBox(10 * WR);
 			meal.setPadding(new Insets(10 * HR, 50 * WR, 0, 0));
@@ -351,7 +362,7 @@ public class Main extends Application {
 					selectedFoods.getStyleClass().add("white-labels");
 					selectedFoods.setPadding(new Insets(20 * HR, 0, 0, 20 * WR));
 					this.getChildren().add(selectedFoods);
-					mealViewer = new ListView<FoodItem>();
+					mealViewer = new ListView<FoodItem>(); 
 					mealViewer.setPrefHeight(425 * HR);
 					mealViewer.setPrefWidth(400 * WR);
 					mealViewer.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -366,7 +377,7 @@ public class Main extends Application {
 										for (FoodItem f : mealViewer.getSelectionModel().getSelectedItems()) {
 											mealList.removeFromMeal(f);
 										}
-										mealViewer.setItems(FXCollections.observableArrayList(mealList.getMeal()));
+										mealViewer.setItems(FXCollections.observableArrayList(mealList.getMeal())); //Remove from meal and make sure no duplicates
 									});
 								}
 							});
@@ -374,21 +385,22 @@ public class Main extends Application {
 							// graph containing nutritional facts 
 							this.getChildren().add(new Button("Analyze Nutritional Analysis") {
 								{
-									this.setOnAction(e -> {
-										Stage popupStage = new Stage();
+									this.setOnAction(e -> { //when "Analyze Nutritional Analysis" is clicked, the following code is executed
+										Stage popupStage = new Stage(); //new popup is instantiated
 										AnchorPane popupPane = new AnchorPane();
 										popupPane.setMaxHeight(400 * HR);
 										popupPane.setMaxWidth(900 * WR);
 										CategoryAxis xAxis = new CategoryAxis();
-										xAxis.setLabel("Nutrient");
+										xAxis.setLabel("Nutrient"); 
 										NumberAxis yAxis = new NumberAxis();
 										yAxis.setLabel("Total");
-										BarChart<String, Double> nutriAnalysis = new BarChart(xAxis, yAxis);
+										BarChart<String, Double> nutriAnalysis = new BarChart(xAxis, yAxis); //creates a new barChart with an x axis and y axis
 										nutriAnalysis.setPrefHeight(400 * HR);
 										nutriAnalysis.setPrefWidth(500 * WR);
 										XYChart.Series<String, Double> dataSeries1 = new XYChart.Series();
 										dataSeries1.setName("Nutrients within Selected Meal List");
-										mealList.nutriAnalysis();
+										mealList.nutriAnalysis(); //calls the nutritional analysis method on the meal list
+										//five columns are created for the corresponding nutritinal facts of the list
 										dataSeries1.getData().add(
 												new XYChart.Data<String, Double>("Calories", mealList.getTotalCals()));
 										dataSeries1.getData().add(new XYChart.Data<String, Double>("Fat (grams)",
@@ -399,17 +411,18 @@ public class Main extends Application {
 												mealList.getTotalFiber()));
 										dataSeries1.getData().add(new XYChart.Data<String, Double>("Protein (grams)",
 												mealList.getTotalProtein()));
-										nutriAnalysis.getData().add(dataSeries1);
-										HBox information = new HBox();
-										information.getChildren().add(nutriAnalysis);
-										VBox amountSum = new VBox();
+										nutriAnalysis.getData().add(dataSeries1); 
+										HBox information = new HBox(); //Hbox is added to store the graph
+										information.getChildren().add(nutriAnalysis); //graph is added to the Hbox
+										VBox amountSum = new VBox(); //a Vbox is created to output all of the numbers of the meal list
 										amountSum.setPadding(new Insets(120 * HR, 0, 0, 50 * WR));
 										Label cals = new Label("Calories: " + mealList.getTotalCals());
 										Label fat = new Label("Fat: " + mealList.getTotalFat());
 										Label carbs = new Label("Carbs: " + mealList.getTotalCarbs());
 										Label fiber = new Label("Fiber: " + mealList.getTotalFiber());
 										Label protein = new Label("Protein: " + mealList.getTotalProtein());
-										amountSum.getChildren().addAll(cals, fat, carbs, fiber, protein);
+										amountSum.getChildren().addAll(cals, fat, carbs, fiber, protein); //all labels are added to amountSum
+										//the vbox filled with labels is added to the HBox, and then added to the popup
 										information.getChildren().add(amountSum);
 										popupPane.getChildren().addAll(information);
 										Scene scene = new Scene(popupPane, 700 * WR, 400 * HR);
@@ -460,20 +473,21 @@ public class Main extends Application {
 			na.setOnAction(e -> {
 				List<FoodItem> list = new ArrayList<>(foodData.getAllFoodItems());
 				List<String> filters = new ArrayList<>();
+				//Get all filters and add them to filters
 				for (int i = 1; i < forms.length; i++) {
 					if (forms[i].isSelected())
 						filters.add(forms[i].getText());
 					else
 						filters.add("");
 				}
-				forms[0].filter(list);
-				for (int i = 1; i < forms.length; i++) {
-					if (forms[i].isSelected()) {
+				forms[0].filter(list);//Filter by name
+				for (int i = 1; i < forms.length; i++) { //Filter by nutrients
+					if (forms[i].isSelected()) { //Only call filterByNutrients once because it works on all filters
 						forms[i].filter(list, filters);
 						break;
 					}
 				}
-				ObservableList<FoodItem> items = FXCollections.observableArrayList(list);
+				ObservableList<FoodItem> items = FXCollections.observableArrayList(list); //Update list
 				listOfFoods.setItems(items);
 				numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
 			});
@@ -481,7 +495,7 @@ public class Main extends Application {
 			Button help = new Button("Clear");
 			help.setOnAction(e->{
 				for(FormType f : forms) {
-					f.clear();
+					f.clear(); //Clear filters on clear clicked
 				}
 				ObservableList<FoodItem> items = FXCollections.observableArrayList(foodData.getAllFoodItems());
 				listOfFoods.setItems(items);
@@ -510,17 +524,17 @@ public class Main extends Application {
 	}
 
 	private void loadFile() {
-		FileChooser fileChooser = new FileChooser();
+		FileChooser fileChooser = new FileChooser();//Open FileChooser
 		fileChooser.setTitle("Open Resource File");
 		if (file != null) {
 			fileChooser.setInitialDirectory(file.getParentFile());
 		}
 		File choosenFile = fileChooser.showOpenDialog(null);
-		if (choosenFile != null) {
+		if (choosenFile != null) { //If file isnt null
 			file = choosenFile;
 			fileName.setText(file.getName());
-			foodData = new FoodData();
-			foodData.loadFoodItems(file.getAbsolutePath());
+			foodData = new FoodData(); //Make new food data object
+			foodData.loadFoodItems(file.getAbsolutePath()); //Populate foodData
 			ObservableList<FoodItem> items = FXCollections.observableArrayList(foodData.getAllFoodItems());
 			listOfFoods.setItems(items);
 			numberLabel.setText("# of items in Food List: " + listOfFoods.getItems().size());
