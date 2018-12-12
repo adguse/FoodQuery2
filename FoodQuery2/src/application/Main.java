@@ -202,7 +202,7 @@ public class Main extends Application {
 									}catch(NumberFormatException ne) {
 										Alert alert = new Alert(AlertType.ERROR);
 										alert.setTitle("Error Dialog");
-										alert.setHeaderText("Opps, looks like your search criteria isn't in the correct format");
+										alert.setHeaderText("Opps, looks like your nutrition values aren't in the correct format");
 										alert.setContentText("All nutrient values must exist and be numeric");
 
 										alert.showAndWait();
