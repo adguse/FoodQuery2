@@ -65,9 +65,6 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 			return new ArrayList<V>();
 		List<V> search = root.rangeSearch(key, comparator);
 		System.out.println(this.toString());
-		for (V item : search) {
-			System.out.print(item + " ,");
-		}
 		return search;
 	}
 
@@ -277,22 +274,24 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 		List<V> rangeSearch(K key, String comparator) {
 			List<V> searched = null; // Creates new List of values to be returned
 			Iterator<K> itr = keys.iterator(); // Iterates through keys of node
-			int childIndex = 0; // Index being looked at
 
 			// This will loop through the keys and recursive call with the corrent child
 			// node
-			while (itr.hasNext()) {
-				K next = itr.next(); // Key being looked at
+			int childIndex = 0;
+			for (childIndex = 0; childIndex < this.keys.size(); childIndex++) {
+				K next = this.keys.get(childIndex); // Key being looked at
 				if (key.compareTo(next) == -1) {
 					Node child = this.children.get(childIndex);
 					searched = child.rangeSearch(key, comparator);
 					return searched;
 				} else if (key.compareTo(next) == 0) {
+					if ((this.keys.size() != childIndex + 1) && (this.keys.get(childIndex + 1).equals(key))) {
+						continue;
+					}
 					Node child = this.children.get(childIndex + 1);
 					searched = child.rangeSearch(key, comparator);
 					return searched;
 				}
-				childIndex++;
 			}
 
 			// Handles if the key is greater then all keys
@@ -478,13 +477,14 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 	 */
 	public static void main(String[] args) {
 		// create empty BPTree with branching factor of 3
-		BPTree<Double, Double> bpTree = new BPTree<>(3);
+		BPTree<Double, Double> bpTree = new BPTree<>(4);
 
 		// create a pseudo random number generator
 		Random rnd1 = new Random();
 
 		// some value to add to the BPTree
-		Double[] dd = { 10d, 9d, 8d, 10d, 11d, 10d, 9d, 8d, 8d, 9d, 10d, 11d, 35d, 55d, 74d, 101d, 22d };
+		Double[] dd = { 10d, 9d, 8d, 10d, 11d, 10d, 9d, 8d, 8d, 9d, 10d, 11d, 35d, 55d, 74d, 101d, 22d, 10d, 11d, 10d,
+				11d, 11d, 11d, 10d };
 
 		// build an ArrayList of those value and add to BPTree also
 		// allows for comparing the contents of the ArrayList
@@ -499,7 +499,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 			bpTree.insert(j, j);
 			System.out.println("\n\nTree structure:\n" + bpTree.toString());
 		}
-		List<Double> gg = bpTree.rangeSearch(10d, ">=");
+		List<Double> gg = bpTree.rangeSearch(10d, "==");
 		for (int i = 0; i < gg.size(); ++i) {
 			System.out.println(gg.get(i));
 		}
