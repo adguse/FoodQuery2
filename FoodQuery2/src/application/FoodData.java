@@ -176,11 +176,11 @@ public class FoodData implements FoodDataADT<FoodItem> {
 	public void addFoodItem(FoodItem foodItem) {
 		foodItemList.add(foodItem); //adds the food item to the food list
 		//adds each nutritional value of the food iteam into its respective BPTree
-		indexes.get("Calories").insert(foodItem.getNutrientValue("Calories"), foodItem);
-		indexes.get("Fat").insert(foodItem.getNutrientValue("Fat"), foodItem);
-		indexes.get("Carb").insert(foodItem.getNutrientValue("Carb"), foodItem);
-		indexes.get("Fiber").insert(foodItem.getNutrientValue("Fiber"), foodItem);
-		indexes.get("Protein").insert(foodItem.getNutrientValue("Protein"), foodItem);
+		indexes.get("Calories").insert(foodItem.getNutrientValue("calories"), foodItem);
+		indexes.get("Fat").insert(foodItem.getNutrientValue("fat"), foodItem);
+		indexes.get("Carb").insert(foodItem.getNutrientValue("carbohydrate"), foodItem);
+		indexes.get("Fiber").insert(foodItem.getNutrientValue("fiber"), foodItem);
+		indexes.get("Protein").insert(foodItem.getNutrientValue("protein"), foodItem);
 		foodItemList.sort(Main.lexicographicOrder); //resorts the list
 	}
 
