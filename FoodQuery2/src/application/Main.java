@@ -18,6 +18,7 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -28,6 +29,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -78,6 +80,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			
 
 			BorderPane root = new BorderPane();
 			MenuBar bar = new MenuBar();
@@ -165,6 +168,30 @@ public class Main extends Application {
 					smallTitle.getStyleClass().add("white-labels");
 					this.getChildren().add(smallTitle);
 					listOfFoods = new ListView<FoodItem>();
+					listOfFoods.setCellFactory(new Callback<ListView<FoodItem>, ListCell<FoodItem>>() {
+
+			          public ListCell<FoodItem> call(ListView<FoodItem> param) {
+			            final Label leadLbl = new Label();
+			            final Tooltip tooltip = new Tooltip();
+			            final ListCell<FoodItem> cell = new ListCell<FoodItem>() {
+			              @Override
+			              public void updateItem(FoodItem foodItem, boolean empty) {
+			                super.updateItem(foodItem, empty);
+			                if (foodItem != null) {
+			                  leadLbl.setText(foodItem.getName());
+			                  setText(foodItem.getName());
+			                  tooltip.setText("Calories: " + foodItem.getNutrientValue("calories") + "\n"
+			                		  + "Carbs: " + foodItem.getNutrientValue("carbohydrate") + "\n"
+			                		  + "Fat: " + foodItem.getNutrientValue("fat") + "\n"
+			                		  + "Fiber: " + foodItem.getNutrientValue("fiber") + "\n"
+			                		  + "Protein: " + foodItem.getNutrientValue("protein") + "\n");
+			                  setTooltip(tooltip);
+			                }
+			              }
+			            }; // ListCell
+			            return cell;
+			          }
+			        }); // setCellFactory
 					listOfFoods.setMinHeight(400 * HR);
 					listOfFoods.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 					this.getChildren()
