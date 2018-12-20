@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Implementation of a B+ tree to allow efficient access to many different
@@ -450,7 +451,9 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 			// looking at the next nodes. Builds a list will the correct values.
 			case ">=":
 				if (keys.get(0).compareTo(key) == 0) {
-					built.addAll(this.previous.rangeSearch(key, "=="));
+					if (this.previous != null) {
+						built.addAll(this.previous.rangeSearch(key, "=="));
+					}
 				}
 				for (int i = 0; i < this.keys.size(); i++) {
 					if (keys.get(i).compareTo(key) >= 0) {
@@ -476,14 +479,13 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 	 */
 	public static void main(String[] args) {
 		// create empty BPTree with branching factor of 3
-		BPTree<Double, Double> bpTree = new BPTree<>(4);
+		BPTree<Double, Double> bpTree = new BPTree<>(3);
 
 		// create a pseudo random number generator
 		Random rnd1 = new Random();
 
 		// some value to add to the BPTree
-		Double[] dd = { 10d, 9d, 8d, 10d, 11d, 10d, 9d, 8d, 8d, 9d, 10d, 11d, 35d, 55d, 74d, 101d, 22d, 10d, 11d, 10d,
-				11d, 11d, 11d, 10d };
+		Double[] dd = { 10d, 9d, 8d, 14d, 12d, 3d, 7d, 11d };
 
 		// build an ArrayList of those value and add to BPTree also
 		// allows for comparing the contents of the ArrayList
@@ -498,12 +500,9 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
 			bpTree.insert(j, j);
 			System.out.println("\n\nTree structure:\n" + bpTree.toString());
 		}
-		List<Double> gg = bpTree.rangeSearch(10d, "==");
-		for (int i = 0; i < gg.size(); ++i) {
-			System.out.println(gg.get(i));
-		}
-		// List<Double> filteredValues = bpTree.rangeSearch(0.2d, ">=");
-		// System.out.println("Filtered values: " + filteredValues.toString());
+		// System.out.println(bpTree.toString());
+		List<Double> filteredValues = bpTree.rangeSearch(3d, ">=");
+		System.out.println("Filtered values: " + filteredValues.toString());
 	}
 
 } // End of class BPTree
